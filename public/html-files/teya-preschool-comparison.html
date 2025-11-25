@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Comparison Tool</title>
+    <title>School Comparison Analysis</title>
     
     <!-- Material Design Icons -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -91,7 +91,7 @@
             color: #1976d2;
         }
         
-        .form-section {
+        .info-section {
             margin-bottom: 24px;
         }
         
@@ -109,54 +109,36 @@
             color: #00796b;
         }
         
-        .input-group {
+        .info-item {
             margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
         
-        .input-field {
-            width: 100%;
-            padding: 12px 16px;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            font-family: 'Roboto', sans-serif;
-        }
-        
-        .input-field:focus {
-            outline: none;
-            border-color: #1976d2;
-            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
-        }
-        
-        .input-field[type="number"] {
-            text-align: right;
+        .info-item:last-child {
+            border-bottom: none;
         }
         
         .label {
-            display: block;
-            margin-bottom: 4px;
             font-weight: 400;
             color: #666;
             font-size: 14px;
+            flex: 1;
         }
         
-        .currency-input {
-            position: relative;
-        }
-        
-        .currency-input::before {
-            content: "$";
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #666;
+        .value {
             font-weight: 500;
+            color: #333;
+            font-size: 14px;
+            text-align: right;
         }
         
-        .currency-input .input-field {
-            padding-left: 32px;
+        .currency-value {
+            color: #1976d2;
+            font-weight: 500;
         }
         
         .total-section {
@@ -212,15 +194,29 @@
             margin-right: 8px;
         }
         
-        .pros textarea, .cons textarea {
-            width: 100%;
-            min-height: 80px;
-            padding: 8px;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            resize: vertical;
-            font-family: 'Roboto', sans-serif;
+        .pros-list, .cons-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .pros-list li, .cons-list li {
+            padding: 4px 0;
             font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .pros-list li:before {
+            content: "✓";
+            color: #4caf50;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        
+        .cons-list li:before {
+            content: "✗";
+            color: #f44336;
+            font-weight: bold;
+            margin-right: 8px;
         }
         
         .summary-section {
@@ -452,7 +448,7 @@
                     </div>
 
                     <div class="total-section">
-                        <div class="total-amount" id="total1">$0.00</div>
+                        <div class="total-amount" id="total1">Rp 0</div>
                         <div style="text-align: center; color: #666; font-size: 14px; margin-top: 4px;">Total Annual Cost</div>
                     </div>
                 </div>
@@ -560,7 +556,7 @@
                     </div>
 
                     <div class="total-section">
-                        <div class="total-amount" id="total2">$0.00</div>
+                        <div class="total-amount" id="total2">Rp 0</div>
                         <div style="text-align: center; color: #666; font-size: 14px; margin-top: 4px;">Total Annual Cost</div>
                     </div>
                 </div>
@@ -668,7 +664,7 @@
                     </div>
 
                     <div class="total-section">
-                        <div class="total-amount" id="total3">$0.00</div>
+                        <div class="total-amount" id="total3">Rp 0</div>
                         <div style="text-align: center; color: #666; font-size: 14px; margin-top: 4px;">Total Annual Cost</div>
                     </div>
                 </div>
@@ -702,15 +698,15 @@
             <div class="summary-grid" id="summaryGrid">
                 <div class="summary-card" id="summaryCard1">
                     <h5 id="summaryName1">School 1</h5>
-                    <div class="total" id="summaryTotal1">$0.00</div>
+                    <div class="total" id="summaryTotal1">Rp 0</div>
                 </div>
                 <div class="summary-card" id="summaryCard2">
                     <h5 id="summaryName2">School 2</h5>
-                    <div class="total" id="summaryTotal2">$0.00</div>
+                    <div class="total" id="summaryTotal2">Rp 0</div>
                 </div>
                 <div class="summary-card" id="summaryCard3">
                     <h5 id="summaryName3">School 3</h5>
-                    <div class="total" id="summaryTotal3">$0.00</div>
+                    <div class="total" id="summaryTotal3">Rp 0</div>
                 </div>
             </div>
         </div>
@@ -796,7 +792,7 @@
                 
                 const name = nameElement.value || `School ${school}`;
                 const totalText = totalElement.textContent;
-                const totalValue = parseFloat(totalText.replace(/[$,]/g, '')) || 0;
+                const totalValue = parseFloat(totalText.replace(/[Rp,\s]/g, '')) || 0;
                 
                 summaryNameElement.textContent = name;
                 summaryTotalElement.textContent = totalText;
@@ -836,10 +832,10 @@
 
         // Format currency
         function formatCurrency(amount) {
-            return new Intl.NumberFormat('en-US', {
+            return new Intl.NumberFormat('id-ID', {
                 style: 'currency',
-                currency: 'USD',
-                minimumFractionDigits: 2
+                currency: 'IDR',
+                minimumFractionDigits: 0
             }).format(amount);
         }
 
