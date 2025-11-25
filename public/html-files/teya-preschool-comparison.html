@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Comparison Tool</title>
+    
+    <!-- Material Design Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Google Fonts - Roboto -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .school-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        
+        .school-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .school-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .school-header .material-icons {
+            color: #1976d2;
+            font-size: 2rem;
+            margin-right: 12px;
+        }
+        
+        .school-name {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #1976d2;
+        }
+        
+        .form-section {
+            margin-bottom: 24px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #424242;
+            margin-bottom: 16px;
+        }
+        
+        .section-title .material-icons {
+            margin-right: 8px;
+            color: #00796b;
+        }
+        
+        .input-group {
+            margin-bottom: 12px;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+        
+        .input-field[type="number"] {
+            text-align: right;
+        }
+        
+        .label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 400;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .currency-input {
+            position: relative;
+        }
+        
+        .currency-input::before {
+            content: "$";
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .currency-input .input-field {
+            padding-left: 32px;
+        }
+        
+        .total-section {
+            background: #f8f9fa;
+            border-radius: 4px;
+            padding: 16px;
+            margin-top: 16px;
+            border-left: 4px solid #1976d2;
+        }
+        
+        .total-amount {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #1976d2;
+            text-align: center;
+        }
+        
+        .pros-cons-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-top: 20px;
+        }
+        
+        .pros, .cons {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 4px;
+        }
+        
+        .pros {
+            border-left: 4px solid #4caf50;
+        }
+        
+        .cons {
+            border-left: 4px solid #f44336;
+        }
+        
+        .pros h4, .cons h4 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .pros h4 .material-icons {
+            color: #4caf50;
+            margin-right: 8px;
+        }
+        
+        .cons h4 .material-icons {
+            color: #f44336;
+            margin-right: 8px;
+        }
+        
+        .pros textarea, .cons textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            resize: vertical;
+            font-family: 'Roboto', sans-serif;
+            font-size: 14px;
+        }
+        
+        .summary-section {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 24px;
+            margin-top: 30px;
+        }
+        
+        .summary-title {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #1976d2;
+            margin-bottom: 20px;
+        }
+        
+        .summary-title .material-icons {
+            margin-right: 12px;
+            font-size: 2rem;
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .summary-card {
+            padding: 16px;
+            border-radius: 4px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+        }
+        
+        .summary-card.best-value {
+            border-color: #4caf50;
+            background: #f1f8e9;
+        }
+        
+        .summary-card h5 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .summary-card .total {
+            font-size: 1.3rem;
+            font-weight: 500;
+            color: #1976d2;
+        }
+        
+        .best-value-badge {
+            background: #4caf50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 8px;
+            display: inline-block;
+        }
+        
+        .actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0 8px;
+            transition: background-color 0.3s ease;
+            font-family: 'Roboto', sans-serif;
+        }
+        
+        .btn:hover {
+            background: #1565c0;
+        }
+        
+        .btn-secondary {
+            background: #757575;
+        }
+        
+        .btn-secondary:hover {
+            background: #616161;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pros-cons-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+            }
+            
+            .school-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+            
+            .actions {
+                display: none;
+            }
+            
+            .header {
+                background: #1976d2 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span class="material-icons" style="font-size: 3rem; vertical-align: middle; margin-right: 16px;">school</span>School Comparison Tool</h1>
+            <p class="subtitle">Compare schools comprehensively to make the best decision for your daughter's education</p>
+        </div>
+
+        <div class="comparison-grid" id="schoolGrid">
+            <!-- School 1 -->
+            <div class="school-card" data-school="1">
+                <div class="school-header">
+                    <span class="material-icons">school</span>
+                    <input type="text" class="school-name input-field" placeholder="School Name" id="schoolName1" style="border: none; background: transparent; font-size: 1.5rem; font-weight: 500; color: #1976d2;">
+                </div>
+
+                <!-- Location Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="material-icons">location_on</span>
+                        Location Details
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Address</label>
+                        <input type="text" class="input-field" id="address1" placeholder="School address">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Distance from Home (km)</label>
+                        <input type="number" class="input-field" id="distance1" placeholder="0" step="0.1">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Travel Time (minutes)</label>
+                        <input type="number" class="input-field" id="travelTime1" placeholder="0">
+                    </div>
+                </div>
+
+                <!-- Fees Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="material-icons">attach_money</span>
+                        Annual Fees Breakdown
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Tuition Fees</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="1" data-fee="tuition" id="tuition1" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Registration/Enrollment Fees</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="1" data-fee="registration" id="registration1" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Transportation/Bus Fees</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="1" data-fee="transportation" id="transportation1" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Extracurricular Activities</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="1" data-fee="activities" id="activities1" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Uniforms</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="1" data-fee="uniforms" id="uniforms1" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Books and Materials</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="1" data-fee="books" id="books1" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Field Trips and Excursions</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="1" data-fee="fieldTrips" id="fieldTrips1" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="total-section">
+                        <div class="total-amount" id="total1">$0.00</div>
+                        <div style="text-align: center; color: #666; font-size: 14px; margin-top: 4px;">Total Annual Cost</div>
+                    </div>
+                </div>
+
+                <!-- Pros and Cons Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="material-icons">assessment</span>
+                        Evaluation
+                    </div>
+                    <div class="pros-cons-section">
+                        <div class="pros">
+                            <h4><span class="material-icons">thumb_up</span>Pros</h4>
+                            <textarea id="pros1" placeholder="List the advantages and positive aspects..."></textarea>
+                        </div>
+                        <div class="cons">
+                            <h4><span class="material-icons">thumb_down</span>Cons</h4>
+                            <textarea id="cons1" placeholder="List the disadvantages and concerns..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- School 2 -->
+            <div class="school-card" data-school="2">
+                <div class="school-header">
+                    <span class="material-icons">school</span>
+                    <input type="text" class="school-name input-field" placeholder="School Name" id="schoolName2" style="border: none; background: transparent; font-size: 1.5rem; font-weight: 500; color: #1976d2;">
+                </div>
+
+                <!-- Location Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="material-icons">location_on</span>
+                        Location Details
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Address</label>
+                        <input type="text" class="input-field" id="address2" placeholder="School address">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Distance from Home (km)</label>
+                        <input type="number" class="input-field" id="distance2" placeholder="0" step="0.1">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Travel Time (minutes)</label>
+                        <input type="number" class="input-field" id="travelTime2" placeholder="0">
+                    </div>
+                </div>
+
+                <!-- Fees Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="material-icons">attach_money</span>
+                        Annual Fees Breakdown
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Tuition Fees</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="2" data-fee="tuition" id="tuition2" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Registration/Enrollment Fees</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="2" data-fee="registration" id="registration2" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Transportation/Bus Fees</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="2" data-fee="transportation" id="transportation2" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Extracurricular Activities</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="2" data-fee="activities" id="activities2" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Uniforms</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="2" data-fee="uniforms" id="uniforms2" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Books and Materials</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="2" data-fee="books" id="books2" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Field Trips and Excursions</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="2" data-fee="fieldTrips" id="fieldTrips2" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="total-section">
+                        <div class="total-amount" id="total2">$0.00</div>
+                        <div style="text-align: center; color: #666; font-size: 14px; margin-top: 4px;">Total Annual Cost</div>
+                    </div>
+                </div>
+
+                <!-- Pros and Cons Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="material-icons">assessment</span>
+                        Evaluation
+                    </div>
+                    <div class="pros-cons-section">
+                        <div class="pros">
+                            <h4><span class="material-icons">thumb_up</span>Pros</h4>
+                            <textarea id="pros2" placeholder="List the advantages and positive aspects..."></textarea>
+                        </div>
+                        <div class="cons">
+                            <h4><span class="material-icons">thumb_down</span>Cons</h4>
+                            <textarea id="cons2" placeholder="List the disadvantages and concerns..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- School 3 -->
+            <div class="school-card" data-school="3">
+                <div class="school-header">
+                    <span class="material-icons">school</span>
+                    <input type="text" class="school-name input-field" placeholder="School Name" id="schoolName3" style="border: none; background: transparent; font-size: 1.5rem; font-weight: 500; color: #1976d2;">
+                </div>
+
+                <!-- Location Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="material-icons">location_on</span>
+                        Location Details
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Address</label>
+                        <input type="text" class="input-field" id="address3" placeholder="School address">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Distance from Home (km)</label>
+                        <input type="number" class="input-field" id="distance3" placeholder="0" step="0.1">
+                    </div>
+                    <div class="input-group">
+                        <label class="label">Travel Time (minutes)</label>
+                        <input type="number" class="input-field" id="travelTime3" placeholder="0">
+                    </div>
+                </div>
+
+                <!-- Fees Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="material-icons">attach_money</span>
+                        Annual Fees Breakdown
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Tuition Fees</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="3" data-fee="tuition" id="tuition3" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Registration/Enrollment Fees</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="3" data-fee="registration" id="registration3" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Transportation/Bus Fees</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="3" data-fee="transportation" id="transportation3" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Extracurricular Activities</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="3" data-fee="activities" id="activities3" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Uniforms</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="3" data-fee="uniforms" id="uniforms3" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Books and Materials</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="3" data-fee="books" id="books3" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label class="label">Field Trips and Excursions</label>
+                        <div class="currency-input">
+                            <input type="number" class="input-field fee-input" data-school="3" data-fee="fieldTrips" id="fieldTrips3" placeholder="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div class="total-section">
+                        <div class="total-amount" id="total3">$0.00</div>
+                        <div style="text-align: center; color: #666; font-size: 14px; margin-top: 4px;">Total Annual Cost</div>
+                    </div>
+                </div>
+
+                <!-- Pros and Cons Section -->
+                <div class="form-section">
+                    <div class="section-title">
+                        <span class="material-icons">assessment</span>
+                        Evaluation
+                    </div>
+                    <div class="pros-cons-section">
+                        <div class="pros">
+                            <h4><span class="material-icons">thumb_up</span>Pros</h4>
+                            <textarea id="pros3" placeholder="List the advantages and positive aspects..."></textarea>
+                        </div>
+                        <div class="cons">
+                            <h4><span class="material-icons">thumb_down</span>Cons</h4>
+                            <textarea id="cons3" placeholder="List the disadvantages and concerns..."></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Summary Section -->
+        <div class="summary-section">
+            <div class="summary-title">
+                <span class="material-icons">analytics</span>
+                Cost Comparison Summary
+            </div>
+            <div class="summary-grid" id="summaryGrid">
+                <div class="summary-card" id="summaryCard1">
+                    <h5 id="summaryName1">School 1</h5>
+                    <div class="total" id="summaryTotal1">$0.00</div>
+                </div>
+                <div class="summary-card" id="summaryCard2">
+                    <h5 id="summaryName2">School 2</h5>
+                    <div class="total" id="summaryTotal2">$0.00</div>
+                </div>
+                <div class="summary-card" id="summaryCard3">
+                    <h5 id="summaryName3">School 3</h5>
+                    <div class="total" id="summaryTotal3">$0.00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+            <button class="btn" onclick="saveData()">
+                <span class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 8px;">save</span>
+                Save Data
+            </button>
+            <button class="btn btn-secondary" onclick="clearData()">
+                <span class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 8px;">clear</span>
+                Clear All
+            </button>
+            <button class="btn btn-secondary" onclick="window.print()">
+                <span class="material-icons" style="font-size: 18px; vertical-align: middle; margin-right: 8px;">print</span>
+                Print
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            attachEventListeners();
+            calculateTotals();
+        });
+
+        // Attach event listeners to all fee inputs
+        function attachEventListeners() {
+            const feeInputs = document.querySelectorAll('.fee-input');
+            feeInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    calculateTotals();
+                    updateSummary();
+                    saveData();
+                });
+            });
+
+            // Also listen to school name changes
+            const schoolNameInputs = document.querySelectorAll('[id^="schoolName"]');
+            schoolNameInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    updateSummary();
+                    saveData();
+                });
+            });
+
+            // Listen to all other inputs for auto-save
+            const allInputs = document.querySelectorAll('input, textarea');
+            allInputs.forEach(input => {
+                input.addEventListener('input', saveData);
+            });
+        }
+
+        // Calculate totals for each school
+        function calculateTotals() {
+            for (let school = 1; school <= 3; school++) {
+                let total = 0;
+                const feeTypes = ['tuition', 'registration', 'transportation', 'activities', 'uniforms', 'books', 'fieldTrips'];
+                
+                feeTypes.forEach(feeType => {
+                    const input = document.getElementById(feeType + school);
+                    const value = parseFloat(input.value) || 0;
+                    total += value;
+                });
+
+                const totalElement = document.getElementById('total' + school);
+                totalElement.textContent = formatCurrency(total);
+            }
+        }
+
+        // Update the summary section
+        function updateSummary() {
+            const totals = [];
+            
+            for (let school = 1; school <= 3; school++) {
+                const nameElement = document.getElementById('schoolName' + school);
+                const totalElement = document.getElementById('total' + school);
+                const summaryNameElement = document.getElementById('summaryName' + school);
+                const summaryTotalElement = document.getElementById('summaryTotal' + school);
+                
+                const name = nameElement.value || `School ${school}`;
+                const totalText = totalElement.textContent;
+                const totalValue = parseFloat(totalText.replace(/[$,]/g, '')) || 0;
+                
+                summaryNameElement.textContent = name;
+                summaryTotalElement.textContent = totalText;
+                
+                totals.push({ school, total: totalValue });
+            }
+
+            // Find the best value (lowest cost with a name)
+            const validSchools = totals.filter(s => {
+                const nameInput = document.getElementById('schoolName' + s.school);
+                return nameInput.value.trim() !== '' && s.total > 0;
+            });
+
+            if (validSchools.length > 0) {
+                const bestValue = validSchools.reduce((min, current) => 
+                    current.total < min.total ? current : min
+                );
+
+                // Remove all best-value classes
+                document.querySelectorAll('.summary-card').forEach(card => {
+                    card.classList.remove('best-value');
+                    const badge = card.querySelector('.best-value-badge');
+                    if (badge) badge.remove();
+                });
+
+                // Add best-value class to the lowest cost school
+                const bestCard = document.getElementById('summaryCard' + bestValue.school);
+                bestCard.classList.add('best-value');
+                
+                // Add badge
+                const badge = document.createElement('div');
+                badge.className = 'best-value-badge';
+                badge.textContent = 'Best Value';
+                bestCard.appendChild(badge);
+            }
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2
+            }).format(amount);
+        }
+
+        // Save data to local storage
+        function saveData() {
+            const data = {};
+            
+            // Save all input values
+            const inputs = document.querySelectorAll('input, textarea');
+            inputs.forEach(input => {
+                if (input.id) {
+                    data[input.id] = input.value;
+                }
+            });
+            
+            localStorage.setItem('schoolComparisonData', JSON.stringify(data));
+        }
+
+        // Load data from local storage
+        function loadData() {
+            const savedData = localStorage.getItem('schoolComparisonData');
+            if (savedData) {
+                try {
+                    const data = JSON.parse(savedData);
+                    
+                    // Restore all input values
+                    Object.keys(data).forEach(id => {
+                        const element = document.getElementById(id);
+                        if (element) {
+                            element.value = data[id];
+                        }
+                    });
+                    
+                    // Recalculate totals after loading
+                    setTimeout(() => {
+                        calculateTotals();
+                        updateSummary();
+                    }, 100);
+                } catch (e) {
+                    console.error('Error loading saved data:', e);
+                }
+            }
+        }
+
+        // Clear all data
+        function clearData() {
+            if (confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+                // Clear local storage
+                localStorage.removeItem('schoolComparisonData');
+                
+                // Clear all inputs
+                const inputs = document.querySelectorAll('input, textarea');
+                inputs.forEach(input => {
+                    input.value = '';
+                });
+                
+                // Recalculate totals
+                calculateTotals();
+                updateSummary();
+            }
+        }
+
+        // Remove a school card (for schools 2 and 3)
+        function removeSchool(schoolNumber) {
+            if (schoolNumber === 1) return; // Can't remove school 1
+            
+            if (confirm(`Are you sure you want to remove School ${schoolNumber}?`)) {
+                const schoolCard = document.querySelector(`[data-school="${schoolNumber}"]`);
+                const summaryCard = document.getElementById(`summaryCard${schoolNumber}`);
+                
+                if (schoolCard) schoolCard.style.display = 'none';
+                if (summaryCard) summaryCard.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
