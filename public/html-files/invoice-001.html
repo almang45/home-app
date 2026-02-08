@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice #001</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid #ccc;
+            margin-top: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .total {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div>
+            <h1>INVOICE</h1>
+            <p>#001</p>
+        </div>
+        <div style="text-align: right;">
+            <p>Acme Inc.</p>
+            <p>123 Business Rd.</p>
+            <p>Date: Jan 15, 2024</p>
+        </div>
+    </div>
+    <p><strong>Bill To:</strong> Client Alpha</p>
+    <hr>
+    <p>Web Development Services - $500.00</p>
+    <p>Hosting Setup - $100.00</p>
+    <hr>
+    <div class="total">Total: $600.00</div>
+</body>
+
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Prototype</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f0f2f5;
+            padding: 1rem;
+        }
+
+        .card {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Dashboard Prototype</h1>
+    <div class="grid">
+        <div class="card">
+            <h3>Users</h3>
+            <p>1,234</p>
+        </div>
+        <div class="card">
+            <h3>Revenue</h3>
+            <p>$12,345</p>
+        </div>
+        <div class="card">
+            <h3>Active Sessions</h3>
+            <p>56</p>
+        </div>
+    </div>
+    <div class="card">
+        <h3>Recent Activity</h3>
+        <p>User X logged in.</p>
+        <p>User Y purchased item Z.</p>
+    </div>
+</body>
+
+</html>
