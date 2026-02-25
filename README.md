@@ -20,6 +20,9 @@ I've been creating dashboard UIs at work and for my personal projects. I always 
 - 10+ pages
 - Extra custom components
 - RTL support
+- **Finance Tracker** - Kakeibo-style personal finance management
+- **Inventory Manager** - Home supplies tracker with AI receipt scanning
+- **HTML Viewer** - Browse and open local HTML files
 
 <details>
 <summary>Customized Components (click to expand)</summary>
@@ -73,6 +76,60 @@ If you want to update components using the Shadcn CLI (e.g., `npx shadcn@latest 
 **Icons:** [Lucide Icons](https://lucide.dev/icons/), [Tabler Icons](https://tabler.io/icons) (Brand icons only)
 
 **Auth (partial):** [Clerk](https://go.clerk.com/GttUAaK)
+
+**Backend/BaaS:** [PocketBase](https://pocketbase.io) (optional, required for Finance and Inventory features)
+
+**AI:** [Google Gemini](https://ai.google.dev/) (optional, used for receipt scanning in Inventory)
+
+## Special Features
+
+### Finance Tracker
+
+A Kakeibo-style personal finance management system. Track income and expenses across multiple accounts, plan budgets, manage debts, and reflect on monthly spending.
+
+**Key Features:**
+- Track owned accounts: bank, savings, credit card, e-wallet, cash
+- Log transactions with Kakeibo categories (needs, wants, culture, unexpected)
+- Monthly budget planning per category
+- Debt tracker (payable and receivable)
+- Subscription manager with billing cycle tracking
+- Monthly analysis and reflection journal
+- Bulk transaction entry and CSV import
+
+**Documentation:** See [docs/features/finance](./docs/features/finance/README.md)
+
+**Route:** `/finance`
+
+---
+
+### Inventory Manager
+
+Track home supplies and groceries with stock levels, low-stock alerts, and purchase history. Use AI to scan receipts automatically.
+
+**Key Features:**
+- Item catalog with stock levels and minimum thresholds
+- Low stock alerts with visual indicators
+- Record shopping trips with multi-item support
+- AI receipt scanning via Google Gemini (auto-fill store, date, items)
+- Purchase history grouped by shopping trip
+- PDF shopping list generation
+- Bulk add new items
+
+**Documentation:** See [docs/features/inventory](./docs/features/inventory/README.md)
+
+**Routes:**
+- `/inventory/supplies` - Item catalog and stock management
+- `/inventory/purchases` - Log and view purchase history
+
+---
+
+### HTML Viewer
+
+Browse and open static HTML files stored in `public/html-files/`. Useful for self-contained reports, prototypes, and documents.
+
+**Documentation:** See [docs/features/html-viewer](./docs/features/html-viewer/README.md)
+
+**Route:** `/html-viewer`
 
 ## Run Locally
 
