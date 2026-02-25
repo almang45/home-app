@@ -20,6 +20,7 @@ I've been creating dashboard UIs at work and for my personal projects. I always 
 - 10+ pages
 - Extra custom components
 - RTL support
+- **Warframe Tracker** - Full-featured game progression tracker (see [docs/games/warframe](./docs/games/warframe/README.md))
 
 <details>
 <summary>Customized Components (click to expand)</summary>
@@ -74,6 +75,8 @@ If you want to update components using the Shadcn CLI (e.g., `npx shadcn@latest 
 
 **Auth (partial):** [Clerk](https://go.clerk.com/GttUAaK)
 
+**Backend/BaaS:** [PocketBase](https://pocketbase.io) (optional)
+
 ## Run Locally
 
 Clone the project
@@ -99,6 +102,39 @@ Start the server
 ```bash
   pnpm run dev
 ```
+
+## Special Features
+
+### Warframe Tracker
+
+A comprehensive progression tracking system for Warframe players. Track your collection, plan builds, manage resources, and stay updated with game news.
+
+**Key Features:**
+- 📊 Track owned & mastered Warframes and Weapons
+- 📝 Wishlist with detailed component breakdowns
+- 🎒 Resource inventory management
+- 📰 Real-time news and events
+- 🔧 Recipe scraper for crafting data
+- ☁️ Cloud sync via PocketBase (optional)
+- 💾 Export/Import and backup capabilities
+
+**Documentation:** See [docs/games/warframe](./docs/games/warframe/README.md) for complete documentation.
+
+**Quick Start:**
+1. Navigate to `Games → Warframe Tracker` in the sidebar
+2. Browse Warframes/Weapons and mark what you own
+3. Add items to wishlist and track resource needs
+4. (Optional) Set up PocketBase for cloud sync
+
+**Routes:**
+- `/warframe-tracker` - Overview dashboard
+- `/warframe-tracker/news` - News & Alerts
+- `/warframe-tracker/warframes` - Warframes library
+- `/warframe-tracker/weapons` - Weapons arsenal
+- `/warframe-tracker/resources` - Resource inventory
+- `/warframe-tracker/wishlist` - Build planner
+- `/warframe-tracker/recipe-scraper` - Recipe scraper tool
+- `/warframe-tracker/data-management` - Export/Import
 
 ## Sponsoring this project ❤️
 
