@@ -1,0 +1,20 @@
+[Unit]
+Description=Home-App Frontend (Vite Dev Server)
+After=network.target pocketbase.service
+Wants=pocketbase.service
+
+[Service]
+Type=simple
+WorkingDirectory=/home/deck/Workspaces/personal/Home-App
+# Source nvm and run pnpm dev with --host flag
+ExecStart=/bin/bash -c 'source /home/deck/.nvm/nvm.sh && pnpm run dev -- --host'
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+# Environment variables
+Environment="NODE_ENV=development"
+
+[Install]
+WantedBy=default.target

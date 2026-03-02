@@ -4,6 +4,7 @@ import {
   Monitor,
   Bug,
   ListTodo,
+  FileText,
   FileX,
   HelpCircle,
   Lock,
@@ -21,16 +22,12 @@ import {
   AudioWaveform,
   Command,
   GalleryVerticalEnd,
+  Wallet,
 } from 'lucide-react'
 import { ClerkLogo } from '@/assets/clerk-logo'
 import { type SidebarData } from '../types'
 
 export const sidebarData: SidebarData = {
-  user: {
-    name: 'satnaing',
-    email: 'satnaingdev@gmail.com',
-    avatar: '/avatars/shadcn.jpg',
-  },
   teams: [
     {
       name: 'Shadcn Admin',
@@ -66,6 +63,30 @@ export const sidebarData: SidebarData = {
           title: 'Apps',
           url: '/apps',
           icon: Package,
+        },
+        {
+          title: 'HTML Viewer',
+          url: '/html-viewer',
+          icon: FileText,
+        },
+        {
+          title: 'Inventory',
+          icon: Package,
+          items: [
+            {
+              title: 'Supplies',
+              url: '/inventory/supplies',
+            },
+            {
+              title: 'Purchases',
+              url: '/inventory/purchases',
+            },
+          ],
+        },
+        {
+          title: 'Finance',
+          url: '/finance',
+          icon: Wallet,
         },
         {
           title: 'Chats',

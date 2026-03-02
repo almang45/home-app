@@ -15,6 +15,10 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
+import pb from '@/lib/pocketbase'
+import { toast } from 'sonner'
+import { ClientResponseError } from 'pocketbase'
+import { useNavigate } from '@tanstack/react-router'
 
 const formSchema = z
   .object({
@@ -38,6 +42,7 @@ export function SignUpForm({
   ...props
 }: React.HTMLAttributes<HTMLFormElement>) {
   const [isLoading, setIsLoading] = useState(false)
+  const navigate = useNavigate()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -48,14 +53,27 @@ export function SignUpForm({
     },
   })
 
-  function onSubmit(data: z.infer<typeof formSchema>) {
+  async function onSubmit(data: z.infer<typeof formSchema>) {
     setIsLoading(true)
-    // eslint-disable-next-line no-console
-    console.log(data)
 
-    setTimeout(() => {
+    try {
+      await pb.collection('users').create({
+        email: data.email,
+        password: data.password,
+        passwordConfirm: data.confirmPassword,
+      })
+
+      // Automatically login after successful registration
+      await pb.collection('users').authWithPassword(data.email, data.password)
+
+      toast.success('Account created successfully!')
+      navigate({ to: '/' })
+    } catch (error) {
+      const err = error as ClientResponseError
+      toast.error(err.message || 'Failed to create account')
+    } finally {
       setIsLoading(false)
-    }, 3000)
+    }
   }
 
   return (

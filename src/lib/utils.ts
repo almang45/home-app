@@ -58,3 +58,19 @@ export function getPageNumbers(currentPage: number, totalPages: number) {
 
   return rangeWithDots
 }
+
+/**
+ * Formats a number as IDR currency (e.g. "Rp 10.000")
+ * @param amount - The number to format
+ * @returns Formatted currency string
+ */
+export function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('id-ID', {
+    style: 'currency',
+    currency: 'IDR',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount).replace(/\s/g, ' '); // Ensure space between Rp and number if needed, though default is usually fine. 
+  // Actually, default id-ID might be "Rp10.000" or "Rp 10.000" depending on browser.
+  // Let's stick to standard Intl output first.
+}
