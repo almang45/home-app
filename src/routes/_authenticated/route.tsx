@@ -4,9 +4,10 @@ import pb from '@/lib/pocketbase'
 
 export const Route = createFileRoute('/_authenticated')({
   beforeLoad: async ({ location }) => {
-    // Check if user is authenticated via PocketBase
+    // In dev mode skip auth — mock user is injected via auth-store
+    if (import.meta.env.DEV) return
+
     if (!pb.authStore.isValid) {
-      // Redirect to login with the current location as redirect parameter
       throw redirect({
         to: '/sign-in',
         search: {

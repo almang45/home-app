@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import pb from '@/lib/pocketbase'
-import { AuthModel } from 'pocketbase'
+import type { AuthModel } from 'pocketbase'
+import { DEV_MOCK_USER, seedDevData } from '@/lib/dev-mock'
 
 interface AuthState {
   user: AuthModel | null
@@ -9,19 +10,24 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>((set) => {
-  // Initialize state from PocketBase instance
-  const initialUser = pb.authStore.model
+  // In dev mode: bypass PocketBase, use mock user and seed localStorage data
+  if (import.meta.env.DEV) {
+    seedDevData()
+    return {
+      user: DEV_MOCK_USER,
+      setUser: (user) => set({ user }),
+      logout: () => set({ user: null }),
+    }
+  }
 
-  // globally disable auto cancellation
-  pb.autoCancellation(false);
-
-  // Subscribe to auth state changes
+  // Production: initialize from PocketBase auth state
+  pb.autoCancellation(false)
   pb.authStore.onChange((_token, model) => {
     set({ user: model })
   })
 
   return {
-    user: initialUser,
+    user: pb.authStore.model,
     setUser: (user) => set({ user }),
     logout: () => {
       pb.authStore.clear()
