@@ -1,0 +1,21 @@
+Khora Prime
+├── Credits 25,000 
+├── Khora Prime Neuroptics 1 
+|   ├── Credits 15,000
+|   ├── Argon Crystal 2 
+|   ├── Cryotic 600 
+|   ├── Circuits 1,100 
+|   └── Nano Spores 4,975 
+├── Khora Prime Chassis 1 
+|   ├── Credits 15,000 
+|   ├── Tellurium 2 
+|   ├── Plastids 450 
+|   ├── Polymer Bundle 1,425 
+|   └── Alloy Plate 5,500 
+├── Khora Prime Systems 1 
+|   ├── Credits 15,000 
+|   ├── Nitain Extract 2 
+|   ├── Neurodes 3 
+|   ├── Rubedo 1,250 
+|   └── Salvage 3,800
+└── Orokin Cell 5 

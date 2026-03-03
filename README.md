@@ -23,6 +23,7 @@ I've been creating dashboard UIs at work and for my personal projects. I always 
 - **Finance Tracker** - Kakeibo-style personal finance management
 - **Inventory Manager** - Home supplies tracker with AI receipt scanning
 - **HTML Viewer** - Browse and open local HTML files
+- **Warframe Tracker** - Full-featured game progression tracker (see [docs/games/warframe](./docs/games/warframe/README.md))
 
 <details>
 <summary>Customized Components (click to expand)</summary>
@@ -77,7 +78,7 @@ If you want to update components using the Shadcn CLI (e.g., `npx shadcn@latest 
 
 **Auth (partial):** [Clerk](https://go.clerk.com/GttUAaK)
 
-**Backend/BaaS:** [PocketBase](https://pocketbase.io) (optional, required for Finance and Inventory features)
+**Backend/BaaS:** [PocketBase](https://pocketbase.io) (optional, required for Finance, Inventory, and Warframe Tracker features)
 
 **AI:** [Google Gemini](https://ai.google.dev/) (optional, used for receipt scanning in Inventory)
 
@@ -130,6 +131,39 @@ Browse and open static HTML files stored in `public/html-files/`. Useful for sel
 **Documentation:** See [docs/features/html-viewer](./docs/features/html-viewer/README.md)
 
 **Route:** `/html-viewer`
+
+---
+
+### Warframe Tracker
+
+A comprehensive progression tracking system for Warframe players. Track your collection, plan builds, manage resources, and stay updated with game news.
+
+**Key Features:**
+- 📊 Track owned & mastered Warframes and Weapons
+- 📝 Wishlist with detailed component breakdowns
+- 🎒 Resource inventory management
+- 📰 Real-time news and events
+- 🔧 Recipe scraper for crafting data
+- ☁️ Cloud sync via PocketBase (optional)
+- 💾 Export/Import and backup capabilities
+
+**Documentation:** See [docs/games/warframe](./docs/games/warframe/README.md) for complete documentation.
+
+**Quick Start:**
+1. Navigate to `Games → Warframe Tracker` in the sidebar
+2. Browse Warframes/Weapons and mark what you own
+3. Add items to wishlist and track resource needs
+4. (Optional) Set up PocketBase for cloud sync
+
+**Routes:**
+- `/warframe-tracker` - Overview dashboard
+- `/warframe-tracker/news` - News & Alerts
+- `/warframe-tracker/warframes` - Warframes library
+- `/warframe-tracker/weapons` - Weapons arsenal
+- `/warframe-tracker/resources` - Resource inventory
+- `/warframe-tracker/wishlist` - Build planner
+- `/warframe-tracker/recipe-scraper` - Recipe scraper tool
+- `/warframe-tracker/data-management` - Export/Import
 
 ## Run Locally
 

@@ -15,6 +15,11 @@ Welcome to the home-app documentation.
 #### HTML Viewer
 - **[HTML Viewer Feature](./features/html-viewer/README.md)** - Browse and open local HTML files
 
+### Games
+
+#### Warframe
+- **[Warframe Tracker](./games/warframe/README.md)** - Complete documentation for the Warframe progression tracking system
+
 ### Project Documentation
 
 For general project information, architecture, and conventions, see the root-level files:
@@ -26,7 +31,7 @@ For general project information, architecture, and conventions, see the root-lev
 
 When adding new feature documentation:
 
-1. Create a folder under the appropriate category (e.g., `docs/features/<feature-name>/`)
+1. Create a folder under the appropriate category (e.g., `docs/features/<feature-name>/` or `docs/games/<game-name>/`)
 2. Add a comprehensive `README.md` in that folder
 3. Include supporting documentation files as needed
 4. Update this index file with a link to your documentation
@@ -38,13 +43,23 @@ When adding new feature documentation:
 ```
 docs/
 ├── README.md (this file)
-└── features/
-    ├── finance/
-    │   └── README.md          # Finance feature documentation
-    ├── inventory/
-    │   └── README.md          # Inventory feature documentation
-    └── html-viewer/
-        └── README.md          # HTML Viewer feature documentation
+├── features/
+│   ├── finance/
+│   │   └── README.md          # Finance feature documentation
+│   ├── inventory/
+│   │   └── README.md          # Inventory feature documentation
+│   └── html-viewer/
+│       └── README.md          # HTML Viewer feature documentation
+└── games/
+    └── warframe/
+        ├── README.md                         # Main documentation
+        ├── DATA_ARCHITECTURE.md              # Data architecture
+        ├── GITHUB_FIRST_ARCHITECTURE.md      # Design rationale
+        ├── IMPLEMENTATION_SUMMARY.md         # Implementation details
+        ├── POCKETBASE_SCHEMA.md              # Database schema
+        ├── RECIPE_SCRAPER_INTEGRATION.md     # Recipe scraper
+        ├── WARFRAME_NESTED_MATERIALS_FIX.md  # Nested materials fix
+        └── WARFRAME_TRACKER_TEST_REPORT.md   # Testing report
 ```
 
 ## License

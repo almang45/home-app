@@ -26,6 +26,7 @@ import { Route as ClerkAuthenticatedRouteRouteImport } from './routes/clerk/_aut
 import { Route as ClerkauthRouteRouteImport } from './routes/clerk/(auth)/route'
 import { Route as AuthenticatedSettingsRouteRouteImport } from './routes/_authenticated/settings/route'
 import { Route as AuthenticatedFinanceRouteRouteImport } from './routes/_authenticated/finance/route'
+import { Route as AuthenticatedWarframeTrackerIndexRouteImport } from './routes/_authenticated/warframe-tracker/index'
 import { Route as AuthenticatedUsersIndexRouteImport } from './routes/_authenticated/users/index'
 import { Route as AuthenticatedTasksIndexRouteImport } from './routes/_authenticated/tasks/index'
 import { Route as AuthenticatedSettingsIndexRouteImport } from './routes/_authenticated/settings/index'
@@ -37,6 +38,13 @@ import { Route as AuthenticatedAppsIndexRouteImport } from './routes/_authentica
 import { Route as ClerkAuthenticatedUserManagementRouteImport } from './routes/clerk/_authenticated/user-management'
 import { Route as ClerkauthSignUpRouteImport } from './routes/clerk/(auth)/sign-up'
 import { Route as ClerkauthSignInRouteImport } from './routes/clerk/(auth)/sign-in'
+import { Route as AuthenticatedWarframeTrackerWishlistRouteImport } from './routes/_authenticated/warframe-tracker/wishlist'
+import { Route as AuthenticatedWarframeTrackerWeaponsRouteImport } from './routes/_authenticated/warframe-tracker/weapons'
+import { Route as AuthenticatedWarframeTrackerWarframesRouteImport } from './routes/_authenticated/warframe-tracker/warframes'
+import { Route as AuthenticatedWarframeTrackerResourcesRouteImport } from './routes/_authenticated/warframe-tracker/resources'
+import { Route as AuthenticatedWarframeTrackerRecipeScraperRouteImport } from './routes/_authenticated/warframe-tracker/recipe-scraper'
+import { Route as AuthenticatedWarframeTrackerNewsRouteImport } from './routes/_authenticated/warframe-tracker/news'
+import { Route as AuthenticatedWarframeTrackerDataManagementRouteImport } from './routes/_authenticated/warframe-tracker/data-management'
 import { Route as AuthenticatedSettingsNotificationsRouteImport } from './routes/_authenticated/settings/notifications'
 import { Route as AuthenticatedSettingsDisplayRouteImport } from './routes/_authenticated/settings/display'
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
@@ -129,6 +137,12 @@ const AuthenticatedFinanceRouteRoute =
     path: '/finance',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedWarframeTrackerIndexRoute =
+  AuthenticatedWarframeTrackerIndexRouteImport.update({
+    id: '/warframe-tracker/',
+    path: '/warframe-tracker/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedUsersIndexRoute = AuthenticatedUsersIndexRouteImport.update({
   id: '/users/',
   path: '/users/',
@@ -189,6 +203,48 @@ const ClerkauthSignInRoute = ClerkauthSignInRouteImport.update({
   path: '/sign-in',
   getParentRoute: () => ClerkauthRouteRoute,
 } as any)
+const AuthenticatedWarframeTrackerWishlistRoute =
+  AuthenticatedWarframeTrackerWishlistRouteImport.update({
+    id: '/warframe-tracker/wishlist',
+    path: '/warframe-tracker/wishlist',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWarframeTrackerWeaponsRoute =
+  AuthenticatedWarframeTrackerWeaponsRouteImport.update({
+    id: '/warframe-tracker/weapons',
+    path: '/warframe-tracker/weapons',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWarframeTrackerWarframesRoute =
+  AuthenticatedWarframeTrackerWarframesRouteImport.update({
+    id: '/warframe-tracker/warframes',
+    path: '/warframe-tracker/warframes',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWarframeTrackerResourcesRoute =
+  AuthenticatedWarframeTrackerResourcesRouteImport.update({
+    id: '/warframe-tracker/resources',
+    path: '/warframe-tracker/resources',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWarframeTrackerRecipeScraperRoute =
+  AuthenticatedWarframeTrackerRecipeScraperRouteImport.update({
+    id: '/warframe-tracker/recipe-scraper',
+    path: '/warframe-tracker/recipe-scraper',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWarframeTrackerNewsRoute =
+  AuthenticatedWarframeTrackerNewsRouteImport.update({
+    id: '/warframe-tracker/news',
+    path: '/warframe-tracker/news',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWarframeTrackerDataManagementRoute =
+  AuthenticatedWarframeTrackerDataManagementRouteImport.update({
+    id: '/warframe-tracker/data-management',
+    path: '/warframe-tracker/data-management',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSettingsNotificationsRoute =
   AuthenticatedSettingsNotificationsRouteImport.update({
     id: '/notifications',
@@ -255,6 +311,13 @@ export interface FileRoutesByFullPath {
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/warframe-tracker/data-management': typeof AuthenticatedWarframeTrackerDataManagementRoute
+  '/warframe-tracker/news': typeof AuthenticatedWarframeTrackerNewsRoute
+  '/warframe-tracker/recipe-scraper': typeof AuthenticatedWarframeTrackerRecipeScraperRoute
+  '/warframe-tracker/resources': typeof AuthenticatedWarframeTrackerResourcesRoute
+  '/warframe-tracker/warframes': typeof AuthenticatedWarframeTrackerWarframesRoute
+  '/warframe-tracker/weapons': typeof AuthenticatedWarframeTrackerWeaponsRoute
+  '/warframe-tracker/wishlist': typeof AuthenticatedWarframeTrackerWishlistRoute
   '/clerk/sign-in': typeof ClerkauthSignInRoute
   '/clerk/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/user-management': typeof ClerkAuthenticatedUserManagementRoute
@@ -266,6 +329,7 @@ export interface FileRoutesByFullPath {
   '/settings/': typeof AuthenticatedSettingsIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
+  '/warframe-tracker': typeof AuthenticatedWarframeTrackerIndexRoute
 }
 export interface FileRoutesByTo {
   '/clerk': typeof ClerkAuthenticatedRouteRouteWithChildren
@@ -287,6 +351,13 @@ export interface FileRoutesByTo {
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/warframe-tracker/data-management': typeof AuthenticatedWarframeTrackerDataManagementRoute
+  '/warframe-tracker/news': typeof AuthenticatedWarframeTrackerNewsRoute
+  '/warframe-tracker/recipe-scraper': typeof AuthenticatedWarframeTrackerRecipeScraperRoute
+  '/warframe-tracker/resources': typeof AuthenticatedWarframeTrackerResourcesRoute
+  '/warframe-tracker/warframes': typeof AuthenticatedWarframeTrackerWarframesRoute
+  '/warframe-tracker/weapons': typeof AuthenticatedWarframeTrackerWeaponsRoute
+  '/warframe-tracker/wishlist': typeof AuthenticatedWarframeTrackerWishlistRoute
   '/clerk/sign-in': typeof ClerkauthSignInRoute
   '/clerk/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/user-management': typeof ClerkAuthenticatedUserManagementRoute
@@ -298,6 +369,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsIndexRoute
   '/tasks': typeof AuthenticatedTasksIndexRoute
   '/users': typeof AuthenticatedUsersIndexRoute
+  '/warframe-tracker': typeof AuthenticatedWarframeTrackerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -325,6 +397,13 @@ export interface FileRoutesById {
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/_authenticated/warframe-tracker/data-management': typeof AuthenticatedWarframeTrackerDataManagementRoute
+  '/_authenticated/warframe-tracker/news': typeof AuthenticatedWarframeTrackerNewsRoute
+  '/_authenticated/warframe-tracker/recipe-scraper': typeof AuthenticatedWarframeTrackerRecipeScraperRoute
+  '/_authenticated/warframe-tracker/resources': typeof AuthenticatedWarframeTrackerResourcesRoute
+  '/_authenticated/warframe-tracker/warframes': typeof AuthenticatedWarframeTrackerWarframesRoute
+  '/_authenticated/warframe-tracker/weapons': typeof AuthenticatedWarframeTrackerWeaponsRoute
+  '/_authenticated/warframe-tracker/wishlist': typeof AuthenticatedWarframeTrackerWishlistRoute
   '/clerk/(auth)/sign-in': typeof ClerkauthSignInRoute
   '/clerk/(auth)/sign-up': typeof ClerkauthSignUpRoute
   '/clerk/_authenticated/user-management': typeof ClerkAuthenticatedUserManagementRoute
@@ -336,6 +415,7 @@ export interface FileRoutesById {
   '/_authenticated/settings/': typeof AuthenticatedSettingsIndexRoute
   '/_authenticated/tasks/': typeof AuthenticatedTasksIndexRoute
   '/_authenticated/users/': typeof AuthenticatedUsersIndexRoute
+  '/_authenticated/warframe-tracker/': typeof AuthenticatedWarframeTrackerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -362,6 +442,13 @@ export interface FileRouteTypes {
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
+    | '/warframe-tracker/data-management'
+    | '/warframe-tracker/news'
+    | '/warframe-tracker/recipe-scraper'
+    | '/warframe-tracker/resources'
+    | '/warframe-tracker/warframes'
+    | '/warframe-tracker/weapons'
+    | '/warframe-tracker/wishlist'
     | '/clerk/sign-in'
     | '/clerk/sign-up'
     | '/clerk/user-management'
@@ -373,6 +460,7 @@ export interface FileRouteTypes {
     | '/settings/'
     | '/tasks'
     | '/users'
+    | '/warframe-tracker'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/clerk'
@@ -394,6 +482,13 @@ export interface FileRouteTypes {
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
+    | '/warframe-tracker/data-management'
+    | '/warframe-tracker/news'
+    | '/warframe-tracker/recipe-scraper'
+    | '/warframe-tracker/resources'
+    | '/warframe-tracker/warframes'
+    | '/warframe-tracker/weapons'
+    | '/warframe-tracker/wishlist'
     | '/clerk/sign-in'
     | '/clerk/sign-up'
     | '/clerk/user-management'
@@ -405,6 +500,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/tasks'
     | '/users'
+    | '/warframe-tracker'
   id:
     | '__root__'
     | '/_authenticated'
@@ -431,6 +527,13 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/appearance'
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
+    | '/_authenticated/warframe-tracker/data-management'
+    | '/_authenticated/warframe-tracker/news'
+    | '/_authenticated/warframe-tracker/recipe-scraper'
+    | '/_authenticated/warframe-tracker/resources'
+    | '/_authenticated/warframe-tracker/warframes'
+    | '/_authenticated/warframe-tracker/weapons'
+    | '/_authenticated/warframe-tracker/wishlist'
     | '/clerk/(auth)/sign-in'
     | '/clerk/(auth)/sign-up'
     | '/clerk/_authenticated/user-management'
@@ -442,6 +545,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/'
     | '/_authenticated/tasks/'
     | '/_authenticated/users/'
+    | '/_authenticated/warframe-tracker/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -580,6 +684,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFinanceRouteRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/warframe-tracker/': {
+      id: '/_authenticated/warframe-tracker/'
+      path: '/warframe-tracker'
+      fullPath: '/warframe-tracker'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/users/': {
       id: '/_authenticated/users/'
       path: '/users'
@@ -656,6 +767,55 @@ declare module '@tanstack/react-router' {
       fullPath: '/clerk/sign-in'
       preLoaderRoute: typeof ClerkauthSignInRouteImport
       parentRoute: typeof ClerkauthRouteRoute
+    }
+    '/_authenticated/warframe-tracker/wishlist': {
+      id: '/_authenticated/warframe-tracker/wishlist'
+      path: '/warframe-tracker/wishlist'
+      fullPath: '/warframe-tracker/wishlist'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerWishlistRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/warframe-tracker/weapons': {
+      id: '/_authenticated/warframe-tracker/weapons'
+      path: '/warframe-tracker/weapons'
+      fullPath: '/warframe-tracker/weapons'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerWeaponsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/warframe-tracker/warframes': {
+      id: '/_authenticated/warframe-tracker/warframes'
+      path: '/warframe-tracker/warframes'
+      fullPath: '/warframe-tracker/warframes'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerWarframesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/warframe-tracker/resources': {
+      id: '/_authenticated/warframe-tracker/resources'
+      path: '/warframe-tracker/resources'
+      fullPath: '/warframe-tracker/resources'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerResourcesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/warframe-tracker/recipe-scraper': {
+      id: '/_authenticated/warframe-tracker/recipe-scraper'
+      path: '/warframe-tracker/recipe-scraper'
+      fullPath: '/warframe-tracker/recipe-scraper'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerRecipeScraperRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/warframe-tracker/news': {
+      id: '/_authenticated/warframe-tracker/news'
+      path: '/warframe-tracker/news'
+      fullPath: '/warframe-tracker/news'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerNewsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/warframe-tracker/data-management': {
+      id: '/_authenticated/warframe-tracker/data-management'
+      path: '/warframe-tracker/data-management'
+      fullPath: '/warframe-tracker/data-management'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerDataManagementRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/settings/notifications': {
       id: '/_authenticated/settings/notifications'
@@ -753,12 +913,20 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
   AuthenticatedInventoryPurchasesRoute: typeof AuthenticatedInventoryPurchasesRoute
   AuthenticatedInventorySuppliesRoute: typeof AuthenticatedInventorySuppliesRoute
+  AuthenticatedWarframeTrackerDataManagementRoute: typeof AuthenticatedWarframeTrackerDataManagementRoute
+  AuthenticatedWarframeTrackerNewsRoute: typeof AuthenticatedWarframeTrackerNewsRoute
+  AuthenticatedWarframeTrackerRecipeScraperRoute: typeof AuthenticatedWarframeTrackerRecipeScraperRoute
+  AuthenticatedWarframeTrackerResourcesRoute: typeof AuthenticatedWarframeTrackerResourcesRoute
+  AuthenticatedWarframeTrackerWarframesRoute: typeof AuthenticatedWarframeTrackerWarframesRoute
+  AuthenticatedWarframeTrackerWeaponsRoute: typeof AuthenticatedWarframeTrackerWeaponsRoute
+  AuthenticatedWarframeTrackerWishlistRoute: typeof AuthenticatedWarframeTrackerWishlistRoute
   AuthenticatedAppsIndexRoute: typeof AuthenticatedAppsIndexRoute
   AuthenticatedChatsIndexRoute: typeof AuthenticatedChatsIndexRoute
   AuthenticatedHelpCenterIndexRoute: typeof AuthenticatedHelpCenterIndexRoute
   AuthenticatedHtmlViewerIndexRoute: typeof AuthenticatedHtmlViewerIndexRoute
   AuthenticatedTasksIndexRoute: typeof AuthenticatedTasksIndexRoute
   AuthenticatedUsersIndexRoute: typeof AuthenticatedUsersIndexRoute
+  AuthenticatedWarframeTrackerIndexRoute: typeof AuthenticatedWarframeTrackerIndexRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
@@ -768,12 +936,27 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
   AuthenticatedInventoryPurchasesRoute: AuthenticatedInventoryPurchasesRoute,
   AuthenticatedInventorySuppliesRoute: AuthenticatedInventorySuppliesRoute,
+  AuthenticatedWarframeTrackerDataManagementRoute:
+    AuthenticatedWarframeTrackerDataManagementRoute,
+  AuthenticatedWarframeTrackerNewsRoute: AuthenticatedWarframeTrackerNewsRoute,
+  AuthenticatedWarframeTrackerRecipeScraperRoute:
+    AuthenticatedWarframeTrackerRecipeScraperRoute,
+  AuthenticatedWarframeTrackerResourcesRoute:
+    AuthenticatedWarframeTrackerResourcesRoute,
+  AuthenticatedWarframeTrackerWarframesRoute:
+    AuthenticatedWarframeTrackerWarframesRoute,
+  AuthenticatedWarframeTrackerWeaponsRoute:
+    AuthenticatedWarframeTrackerWeaponsRoute,
+  AuthenticatedWarframeTrackerWishlistRoute:
+    AuthenticatedWarframeTrackerWishlistRoute,
   AuthenticatedAppsIndexRoute: AuthenticatedAppsIndexRoute,
   AuthenticatedChatsIndexRoute: AuthenticatedChatsIndexRoute,
   AuthenticatedHelpCenterIndexRoute: AuthenticatedHelpCenterIndexRoute,
   AuthenticatedHtmlViewerIndexRoute: AuthenticatedHtmlViewerIndexRoute,
   AuthenticatedTasksIndexRoute: AuthenticatedTasksIndexRoute,
   AuthenticatedUsersIndexRoute: AuthenticatedUsersIndexRoute,
+  AuthenticatedWarframeTrackerIndexRoute:
+    AuthenticatedWarframeTrackerIndexRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

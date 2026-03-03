@@ -1,18 +1,23 @@
 import {
   Construction,
+  Crosshair,
   LayoutDashboard,
   Monitor,
   Bug,
   ListTodo,
   FileText,
   FileX,
+  Heart,
   HelpCircle,
   Lock,
   Bell,
+  Newspaper,
   Package,
   Palette,
   ServerOff,
   Settings,
+  Shield,
+  Swords,
   Wrench,
   UserCog,
   UserX,
@@ -23,6 +28,9 @@ import {
   Command,
   GalleryVerticalEnd,
   Wallet,
+  Gem,
+  Database,
+  Code2,
 } from 'lucide-react'
 import { ClerkLogo } from '@/assets/clerk-logo'
 import { type SidebarData } from '../types'
@@ -114,6 +122,57 @@ export const sidebarData: SidebarData = {
             {
               title: 'User Management',
               url: '/clerk/user-management',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      title: 'Games',
+      items: [
+        {
+          title: 'Warframe Tracker',
+          icon: Crosshair,
+          items: [
+            {
+              title: 'Overview',
+              url: '/warframe-tracker',
+              icon: Crosshair,
+            },
+            {
+              title: 'News & Alerts',
+              url: '/warframe-tracker/news',
+              icon: Newspaper,
+            },
+            {
+              title: 'Warframes',
+              url: '/warframe-tracker/warframes',
+              icon: Shield,
+            },
+            {
+              title: 'Weapons',
+              url: '/warframe-tracker/weapons',
+              icon: Swords,
+            },
+            {
+              title: 'Inventory',
+              url: '/warframe-tracker/resources',
+              icon: Gem,
+            },
+            {
+              title: 'Wishlist',
+              url: '/warframe-tracker/wishlist',
+              icon: Heart,
+            },
+            {
+              title: 'Recipe Scraper',
+              url: '/warframe-tracker/recipe-scraper',
+              icon: Code2,
+            },
+            {
+              title: 'Data Management',
+              url: '/warframe-tracker/data-management',
+              icon: Database,
             },
           ],
         },
