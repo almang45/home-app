@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { logger } from '@/lib/logger';
 import pb from '@/lib/pocketbase';
 import { formatCurrency } from '@/lib/utils';
 import jsPDF from 'jspdf';
@@ -71,13 +72,14 @@ export default function InventoryManager() {
             setItems(records);
             setLoading(false);
         } catch (err) {
-            console.error("Error loading inventory:", err);
+            logger.error("Error loading inventory:", err);
             // Fallback for preview if no backend is running
             setLoading(false);
         }
     };
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchInventory();
     }, []);
 
@@ -138,7 +140,7 @@ export default function InventoryManager() {
                 await pb.collection('items_inventory').update(id, { current_stock: current - 1 });
                 fetchInventory();
             } catch (err) {
-                console.error("Error updating stock:", err);
+                logger.error("Error updating stock:", err);
             }
         }
     };
@@ -312,7 +314,7 @@ export default function InventoryManager() {
             <InventoryForm
                 open={isAddOpen}
                 onOpenChange={setIsAddOpen}
-                initialData={editingItem}
+                initialData={editingItem ?? undefined}
                 onSuccess={fetchInventory}
             />
 

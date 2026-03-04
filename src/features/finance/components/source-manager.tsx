@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Wallet, CreditCard, Building2, Banknote, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -30,7 +30,7 @@ import {
 } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-import { financeSourceSchema, FinanceSourceFormValues } from '../data/schema';
+import { financeSourceSchema, type FinanceSourceFormValues } from '../data/schema';
 import { useSources, useCreateSource, useDeleteSource } from '../data/queries';
 import { formatCurrency } from '@/lib/utils';
 
@@ -42,7 +42,7 @@ export function SourceManager() {
     const deleteSource = useDeleteSource();
 
     const form = useForm<FinanceSourceFormValues>({
-        resolver: zodResolver(financeSourceSchema) as any,
+        resolver: zodResolver(financeSourceSchema) as Resolver<FinanceSourceFormValues>,
         defaultValues: {
             name: '',
             type: 'bank',
@@ -50,13 +50,13 @@ export function SourceManager() {
         },
     });
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: FinanceSourceFormValues) => {
         try {
             await createSource.mutateAsync(data);
             toast.success("Source created successfully");
             setIsOpen(false);
             form.reset();
-        } catch (error) {
+        } catch (_error) {
             toast.error("Failed to create source");
         }
     };
@@ -66,7 +66,7 @@ export function SourceManager() {
         try {
             await deleteSource.mutateAsync(id);
             toast.success("Source deleted");
-        } catch (error) {
+        } catch (_error) {
             toast.error("Failed to delete source");
         }
     };

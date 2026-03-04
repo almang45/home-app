@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { Plus, Calendar, CreditCard } from 'lucide-react';
@@ -34,7 +34,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar as CalendarComponent } from '@/components/ui/calendar';
 import { cn, formatCurrency } from '@/lib/utils';
 
-import { subscriptionSchema, SubscriptionFormValues } from '../data/schema';
+import { subscriptionSchema, type SubscriptionFormValues } from '../data/schema';
 import {
     useSources,
     useCategories,
@@ -53,7 +53,7 @@ export function SubscriptionTracker() {
     const createSubscription = useCreateSubscription();
 
     const form = useForm<SubscriptionFormValues>({
-        resolver: zodResolver(subscriptionSchema) as any,
+        resolver: zodResolver(subscriptionSchema) as Resolver<SubscriptionFormValues>,
         defaultValues: {
             name: '',
             cost: 0,
@@ -74,13 +74,13 @@ export function SubscriptionTracker() {
         return subcategories.filter(s => s.category_id === selectedCategoryId);
     }, [subcategories, selectedCategoryId]);
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: SubscriptionFormValues) => {
         try {
             await createSubscription.mutateAsync(data);
             toast.success("Subscription added");
             setIsOpen(false);
             form.reset();
-        } catch (error) {
+        } catch (_error) {
             toast.error("Failed to add subscription");
         }
     };

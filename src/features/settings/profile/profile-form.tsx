@@ -3,6 +3,7 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Link } from '@tanstack/react-router'
 import { cn } from '@/lib/utils'
+import { logger } from '@/lib/logger'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -52,9 +53,7 @@ export function ProfileForm() {
     defaultValues: {
       username: user?.username || '',
       email: user?.email || '',
-      // @ts-ignore
       bio: user?.bio || '',
-      // @ts-ignore
       urls: user?.urls || [],
     },
     mode: 'onChange',
@@ -73,7 +72,7 @@ export function ProfileForm() {
       toast.success('Profile updated successfully')
     } catch (error) {
       toast.error('Failed to update profile')
-      console.error(error)
+      logger.error(error)
     }
   }
 

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { cn } from '@/lib/utils'
+import { logger } from '@/lib/logger'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -63,9 +64,7 @@ export function AccountForm() {
     resolver: zodResolver(accountFormSchema),
     defaultValues: {
       name: user?.name || '',
-      // @ts-ignore
       dob: user?.dob ? new Date(user.dob) : undefined,
-      // @ts-ignore
       language: user?.language || '',
     },
   })
@@ -78,7 +77,7 @@ export function AccountForm() {
       toast.success('Account updated successfully')
     } catch (error) {
       toast.error('Failed to update account')
-      console.error(error)
+      logger.error(error)
     }
   }
 

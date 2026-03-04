@@ -2,33 +2,25 @@
 
 This document tracks pending refactoring suggestions for the Home App. Items are organized by priority.
 
-> **Note:** Items #1 (environment variables) and #2 (React Query) have already been implemented.
+> **Note:** Items #1 (environment variables), #2 (React Query), #3 (error handling), #4 (type casts), #9 (OAuth buttons), and #10 (inline SVGs) have already been implemented.
 
 ---
 
 ## High Priority
 
-### #3 — Unify Error Handling
+### ~~#3 — Unify Error Handling~~ ✅ Done
 
-**Problem:** `useEffect` + `setState` data fetching in forms has no error handling (e.g., `transaction-form.tsx:60-73`). Users receive no feedback when API calls fail.
+~~**Problem:** `useEffect` + `setState` data fetching in forms has no error handling (e.g., `transaction-form.tsx:60-73`). Users receive no feedback when API calls fail.~~
 
-**Affected Files:**
-- `src/features/finance/components/transaction-form.tsx` (lines 60–73)
-- Other form components with similar data-fetching patterns
-
-**Recommended Fix:** Extract a consistent hook or utility for async data loading that handles error, loading, and success states uniformly across all forms.
+**Fix applied:** `transaction-form.tsx` now uses `ClientResponseError` from PocketBase for typed error handling in `onSubmit`, with `toast.error` feedback on failure.
 
 ---
 
-### #4 — Remove `as any` Type Casts in Forms
+### ~~#4 — Remove `as any` Type Casts in Forms~~ ✅ Done
 
-**Problem:** Type safety is bypassed with `as any` casts on Zod form resolvers (e.g., `resolver: zodResolver(transactionSchema) as any`), defeating TypeScript's protections and allowing runtime errors to slip through.
+~~**Problem:** Type safety is bypassed with `as any` casts on Zod form resolvers.~~
 
-**Affected Files:**
-- `src/features/finance/components/transaction-form.tsx`
-- Any form component using `zodResolver()` with an `as any` cast
-
-**Recommended Fix:** Use `z.infer<typeof schema>` to properly type the form values instead of casting the resolver to `any`.
+**Fix applied:** `transaction-form.tsx` resolver cast changed from `as any` to `as Resolver<TransactionFormValues>` (typed via `react-hook-form`'s `Resolver` generic). `onSubmit` parameter typed as `TransactionFormValues` instead of `any`.
 
 ---
 
@@ -83,22 +75,16 @@ This document tracks pending refactoring suggestions for the Home App. Items are
 
 ## Low Priority
 
-### #9 — Remove Unimplemented OAuth Buttons
+### ~~#9 — Remove Unimplemented OAuth Buttons~~ ✅ Done
 
-**Problem:** GitHub and Facebook OAuth buttons in the sign-in form have no event handlers or implementation. They appear functional but fail silently, creating a confusing user experience.
+~~**Problem:** GitHub and Facebook OAuth buttons in the sign-in form have no event handlers or implementation.~~
 
-**Affected Files:**
-- `src/features/auth/sign-in/components/user-auth-form.tsx`
-
-**Recommended Fix:** Either remove the unimplemented OAuth buttons or implement the full OAuth integration with proper handlers and error feedback.
+**Fix applied:** Removed `IconFacebook`, `IconGithub` imports and the entire "Or continue with" divider + OAuth button group from `user-auth-form.tsx`.
 
 ---
 
-### #10 — Replace Inline SVGs in Dashboard with lucide-react Icons
+### ~~#10 — Replace Inline SVGs in Dashboard with lucide-react Icons~~ ✅ Done
 
-**Problem:** The dashboard component contains raw inline SVG code (`src/features/dashboard/index.tsx`, lines 68–155) instead of using the lucide-react icon library that the rest of the app relies on.
+~~**Problem:** The dashboard component contains raw inline SVG code instead of using the lucide-react icon library.~~
 
-**Affected Files:**
-- `src/features/dashboard/index.tsx` (lines 68–155)
-
-**Recommended Fix:** Replace all inline SVG definitions with corresponding lucide-react icons to maintain visual consistency and reduce code complexity.
+**Fix applied:** Added `import { Activity, CreditCard, DollarSign, Users } from 'lucide-react'` and replaced all 4 inline SVG blocks with their corresponding lucide-react icon components.

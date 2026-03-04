@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { logger } from '@/lib/logger';
 import { FileText, AlertCircle, Check, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
@@ -24,7 +25,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatCurrency } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
 
-import { transactionSchema, TransactionFormValues } from '../data/schema';
+import { transactionSchema, type TransactionFormValues } from '../data/schema';
 import { useSources, useCategories, useSubcategories, useCreateBulkTransactions } from '../data/queries';
 
 interface CsvImporterProps {
@@ -74,7 +75,7 @@ export function CsvImporter({ open, onOpenChange }: CsvImporterProps) {
             if (!line) continue;
 
             const values = line.split(',').map(v => v.trim());
-            const row: any = {};
+            const row: Record<string, string> = {};
 
             headers.forEach((header, index) => {
                 row[header] = values[index];
@@ -101,7 +102,7 @@ export function CsvImporter({ open, onOpenChange }: CsvImporterProps) {
                 if (subcategory) {
                     subcategoryId = subcategory.id;
                 } else {
-                    console.warn(`Row ${i + 1}: Subcategory "${row.subcategory}" not found for category "${category.name}"`);
+                    logger.warn(`Row ${i + 1}: Subcategory "${row.subcategory}" not found for category "${category.name}"`);
                 }
             }
 
@@ -119,7 +120,7 @@ export function CsvImporter({ open, onOpenChange }: CsvImporterProps) {
             if (result.success) {
                 newTransactions.push(result.data as TransactionFormValues);
             } else {
-                newErrors.push(`Row ${i + 1}: ${(result.error as any).errors.map((e: any) => e.message).join(', ')}`);
+                newErrors.push(`Row ${i + 1}: ${result.error.issues.map(e => e.message).join(', ')}`);
             }
         }
 
@@ -135,7 +136,7 @@ export function CsvImporter({ open, onOpenChange }: CsvImporterProps) {
             setFile(null);
             setParsedData([]);
             setErrors([]);
-        } catch (error) {
+        } catch (_error) {
             toast.error("Failed to import transactions");
         }
     };

@@ -1,4 +1,5 @@
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, type Resolver } from 'react-hook-form';
+import { logger } from '@/lib/logger';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
@@ -46,7 +47,7 @@ interface BulkAddDialogProps {
 
 export function BulkAddDialog({ open, onOpenChange, onSuccess }: BulkAddDialogProps) {
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema) as any,
+        resolver: zodResolver(formSchema) as Resolver<z.infer<typeof formSchema>>,
         defaultValues: {
             items: [
                 {
@@ -81,7 +82,7 @@ export function BulkAddDialog({ open, onOpenChange, onSuccess }: BulkAddDialogPr
                 const locs = await pb.collection('items_locations').getFullList({ sort: 'name' });
                 setLocations(locs.map(l => ({ label: l.name, value: l.name })));
             } catch (err) {
-                console.error("Error fetching form options:", err);
+                logger.error("Error fetching form options:", err);
             }
         };
         fetchData();
@@ -152,7 +153,7 @@ export function BulkAddDialog({ open, onOpenChange, onSuccess }: BulkAddDialogPr
             onSuccess();
             onOpenChange(false);
         } catch (error) {
-            console.error('Error saving items:', error);
+            logger.error('Error saving items:', error);
             alert('Failed to save items');
         }
     };

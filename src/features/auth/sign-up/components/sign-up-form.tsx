@@ -17,7 +17,7 @@ import { Input } from '@/components/ui/input'
 import { PasswordInput } from '@/components/password-input'
 import pb from '@/lib/pocketbase'
 import { toast } from 'sonner'
-import { ClientResponseError } from 'pocketbase'
+import type { ClientResponseError } from 'pocketbase'
 import { useNavigate } from '@tanstack/react-router'
 
 const formSchema = z

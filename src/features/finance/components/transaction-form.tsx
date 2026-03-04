@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
@@ -32,7 +32,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { cn, formatCurrency } from '@/lib/utils';
 
-import { transactionSchema, TransactionFormValues } from '../data/schema';
+import type { ClientResponseError } from 'pocketbase';
+import { transactionSchema, type TransactionFormValues } from '../data/schema';
 import { useSources, useCategories, useSubcategories, useCreateTransaction } from '../data/queries';
 
 interface TransactionFormProps {
@@ -46,8 +47,10 @@ export function TransactionForm({ open, onOpenChange }: TransactionFormProps) {
     const { data: subcategories = [] } = useSubcategories();
     const createTransaction = useCreateTransaction();
 
+    // z.coerce.number() makes the zod input type `unknown`, causing a Resolver
+    // type mismatch. Cast to the explicit output type instead of `as any`.
     const form = useForm<TransactionFormValues>({
-        resolver: zodResolver(transactionSchema) as any,
+        resolver: zodResolver(transactionSchema) as Resolver<TransactionFormValues>,
         defaultValues: {
             amount: 0,
             type: 'expense',
@@ -68,7 +71,7 @@ export function TransactionForm({ open, onOpenChange }: TransactionFormProps) {
         return subcategories.filter(s => s.category_id === selectedCategoryId);
     }, [subcategories, selectedCategoryId]);
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: TransactionFormValues) => {
         try {
             await createTransaction.mutateAsync(data);
             toast.success("Transaction logged");
@@ -81,7 +84,8 @@ export function TransactionForm({ open, onOpenChange }: TransactionFormProps) {
                 description: '',
             });
         } catch (error) {
-            toast.error("Failed to log transaction");
+            const err = error as ClientResponseError;
+            toast.error(err.message || 'Failed to log transaction');
         }
     };
 

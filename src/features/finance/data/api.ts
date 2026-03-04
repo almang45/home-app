@@ -1,5 +1,6 @@
 import pb from '@/lib/pocketbase';
-import {
+import { logger } from '@/lib/logger';
+import type {
     FinanceSource,
     Transaction,
     Budget,
@@ -13,7 +14,7 @@ import {
     subscriptionSchema,
     reflectionSchema
 } from './schema';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 // --- Sources ---
 export async function getSources() {
@@ -92,7 +93,7 @@ export async function createBulkTransactions(transactions: z.infer<typeof transa
             const result = await createTransaction(tx);
             results.push(result);
         } catch (error) {
-            console.error("Failed to create transaction in bulk:", tx, error); // eslint-disable-line no-console
+            logger.error("Failed to create transaction in bulk:", tx, error);
             // Continue with others or throw? For now, we continue but log error
         }
     }

@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 
 import { toast } from 'sonner';
 import { Save } from 'lucide-react';
@@ -30,7 +30,7 @@ export function BudgetPlanner() {
         try {
             await setBudget.mutateAsync({ category: categoryId, amount, month });
             toast.success(`Budget for ${categoryName} updated`);
-        } catch (error) {
+        } catch (_error) {
             toast.error("Failed to save budget");
         }
     };
@@ -70,10 +70,12 @@ function BudgetCard({ name, initialAmount, onSave }: { name: string, initialAmou
     const [amount, setAmount] = useState(initialAmount);
     const [isDirty, setIsDirty] = useState(false);
 
-    useEffect(() => {
+    const [prevInitialAmount, setPrevInitialAmount] = useState(initialAmount);
+    if (prevInitialAmount !== initialAmount) {
+        setPrevInitialAmount(initialAmount);
         setAmount(initialAmount);
         setIsDirty(false);
-    }, [initialAmount]);
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setAmount(Number(e.target.value));

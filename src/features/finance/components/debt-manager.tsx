@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'sonner';
 import { Plus, Calendar as CalendarIcon, ArrowUpRight, ArrowDownLeft } from 'lucide-react';
@@ -34,7 +34,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { cn, formatCurrency } from '@/lib/utils';
 
-import { debtSchema, Debt, DebtFormValues } from '../data/schema';
+import { debtSchema, type Debt, type DebtFormValues } from '../data/schema';
 import { useDebts, useCreateDebt, useUpdateDebt } from '../data/queries';
 
 export function DebtManager() {
@@ -45,7 +45,7 @@ export function DebtManager() {
     const updateDebt = useUpdateDebt();
 
     const form = useForm<DebtFormValues>({
-        resolver: zodResolver(debtSchema) as any,
+        resolver: zodResolver(debtSchema) as Resolver<DebtFormValues>,
         defaultValues: {
             name: '',
             type: 'payable',
@@ -54,7 +54,7 @@ export function DebtManager() {
         },
     });
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: DebtFormValues) => {
         try {
             if (data.remaining_amount === 0 && data.amount > 0) {
                 data.remaining_amount = data.amount;
@@ -63,7 +63,7 @@ export function DebtManager() {
             toast.success("Record created successfully");
             setIsOpen(false);
             form.reset();
-        } catch (error) {
+        } catch (_error) {
             toast.error("Failed to create record");
         }
     };
@@ -86,7 +86,7 @@ export function DebtManager() {
         try {
             await updateDebt.mutateAsync({ id: debt.id, data: { remaining_amount: debt.remaining_amount - numAmount } });
             toast.success("Payment recorded");
-        } catch (error) {
+        } catch (_error) {
             toast.error("Failed to update debt");
         }
     };

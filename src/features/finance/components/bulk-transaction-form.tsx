@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2, Save } from 'lucide-react';
 import { format } from 'date-fns';
@@ -54,7 +54,7 @@ export function BulkTransactionForm({ open, onOpenChange }: BulkTransactionFormP
     const createBulkTransactions = useCreateBulkTransactions();
 
     const form = useForm<BulkTransactionFormValues>({
-        resolver: zodResolver(bulkTransactionSchema) as any,
+        resolver: zodResolver(bulkTransactionSchema) as Resolver<BulkTransactionFormValues>,
         defaultValues: {
             transactions: [
                 {
@@ -99,7 +99,7 @@ export function BulkTransactionForm({ open, onOpenChange }: BulkTransactionFormP
             toast.success(`Logged ${data.transactions.length} transactions`);
             onOpenChange(false);
             form.reset();
-        } catch (error) {
+        } catch (_error) {
             toast.error("Failed to log transactions");
         }
     };

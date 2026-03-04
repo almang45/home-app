@@ -1,11 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useState, useEffect, useRef } from 'react';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, type Resolver } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { format } from 'date-fns';
 import pb from '@/lib/pocketbase';
-import { parseReceiptImage } from '@/lib/gemini';
+import { parseReceiptImage } from '@/lib/claude-ai';
+import { logger } from '@/lib/logger';
 import { formatCurrency } from '@/lib/utils';
 import {
     Form,
@@ -53,6 +54,32 @@ const purchaseFormSchema = z.object({
     items: z.array(purchaseItemSchema).min(1, "Add at least one item"),
 });
 
+// --- INTERFACES ---
+
+interface PurchaseRecord {
+    id: string;
+    price: number;
+    quantity: number;
+    store_name: string;
+    buy_date: string;
+    group_id: string;
+    expand?: { item?: { name: string } };
+}
+
+interface PurchaseGroup {
+    group_id: string;
+    store_name: string;
+    buy_date: string;
+    total_amount: number;
+    items: PurchaseRecord[];
+}
+
+interface ScannedItem {
+    name: string;
+    quantity: number;
+    price: number;
+}
+
 // --- HELPER ---
 const generateGroupId = (storeName: string, dateStr: string) => {
     const cleanStore = storeName.replace(/[^a-zA-Z0-9]/g, '').substring(0, 10);
@@ -63,14 +90,14 @@ const generateGroupId = (storeName: string, dateStr: string) => {
 function PurchasesPage() {
     const [activeTab, setActiveTab] = useState('new');
     const [inventoryItems, setInventoryItems] = useState<{ label: string; value: string; last_price: number }[]>([]);
-    const [purchaseHistory, setPurchaseHistory] = useState<any[]>([]); // Grouped history
+    const [purchaseHistory, setPurchaseHistory] = useState<PurchaseGroup[]>([]); // Grouped history
     const [loadingHistory, setLoadingHistory] = useState(false);
     const [isScanning, setIsScanning] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // --- FORM SETUP ---
     const form = useForm<z.infer<typeof purchaseFormSchema>>({
-        resolver: zodResolver(purchaseFormSchema) as any,
+        resolver: zodResolver(purchaseFormSchema) as Resolver<z.infer<typeof purchaseFormSchema>>,
         defaultValues: {
             store_name: '',
             buy_date: format(new Date(), 'yyyy-MM-dd'),
@@ -98,7 +125,7 @@ function PurchasesPage() {
                     last_price: i.last_price
                 })));
             } catch (err) {
-                console.error("Error fetching inventory:", err);
+                logger.error("Error fetching inventory:", err);
             }
         };
         fetchInventory();
@@ -107,13 +134,13 @@ function PurchasesPage() {
     const fetchHistory = async () => {
         setLoadingHistory(true);
         try {
-            const records = await pb.collection('items_purchases').getFullList({
+            const records = await pb.collection('items_purchases').getFullList<PurchaseRecord>({
                 sort: '-buy_date',
                 expand: 'item',
             });
 
             // Group by group_id
-            const grouped = records.reduce((acc: any, record: any) => {
+            const grouped = records.reduce((acc: Record<string, PurchaseGroup>, record) => {
                 const gid = record.group_id || `legacy_${record.id}`;
                 if (!acc[gid]) {
                     acc[gid] = {
@@ -129,9 +156,9 @@ function PurchasesPage() {
                 return acc;
             }, {});
 
-            setPurchaseHistory(Object.values(grouped).sort((a: any, b: any) => new Date(b.buy_date).getTime() - new Date(a.buy_date).getTime()));
+            setPurchaseHistory(Object.values(grouped).sort((a, b) => new Date(b.buy_date).getTime() - new Date(a.buy_date).getTime()));
         } catch (err) {
-            console.error("Error fetching history:", err);
+            logger.error("Error fetching history:", err);
         } finally {
             setLoadingHistory(false);
         }
@@ -174,7 +201,7 @@ function PurchasesPage() {
 
                     // Map items
                     // Try to match with existing inventory by name
-                    const mappedItems = data.items.map((scannedItem: any) => {
+                    const mappedItems = data.items.map((scannedItem: ScannedItem) => {
                         const match = inventoryItems.find(i =>
                             i.label.toLowerCase().includes(scannedItem.name.toLowerCase())
                         );
@@ -189,7 +216,7 @@ function PurchasesPage() {
                     replace(mappedItems);
                     alert("Receipt scanned! Please review the items.");
                 } catch (err) {
-                    console.error("Gemini Error:", err);
+                    logger.error("Receipt scan error:", err);
                     alert("Failed to parse receipt. Please try again.");
                 } finally {
                     setIsScanning(false);
@@ -197,7 +224,7 @@ function PurchasesPage() {
             };
             reader.readAsDataURL(file);
         } catch (error) {
-            console.error("File Error:", error);
+            logger.error("File Error:", error);
             setIsScanning(false);
         }
 
@@ -248,7 +275,7 @@ function PurchasesPage() {
             });
             setActiveTab('history'); // Switch to history to show it
         } catch (error) {
-            console.error('Error recording purchases:', error);
+            logger.error('Error recording purchases:', error);
             alert('Failed to record purchases');
         }
     };
@@ -474,7 +501,7 @@ function PurchasesPage() {
                                                     </TableRow>
                                                 </TableHeader>
                                                 <TableBody>
-                                                    {group.items.map((item: any) => (
+                                                    {group.items.map((item: PurchaseRecord) => (
                                                         <TableRow key={item.id}>
                                                             <TableCell className="font-medium">
                                                                 {item.expand?.item?.name || 'Unknown Item'}

@@ -1,4 +1,5 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
+import { logger } from '@/lib/logger';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
@@ -33,16 +34,27 @@ const formSchema = z.object({
     location_name: z.string().optional(),
 });
 
+interface InventoryItemData {
+    id: string;
+    name: string;
+    brand?: string;
+    category: string;
+    current_stock: number;
+    min_threshold: number;
+    last_price: number;
+    expand?: { stored_in?: { name: string } };
+}
+
 interface InventoryFormProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    initialData?: any;
+    initialData?: InventoryItemData;
     onSuccess: () => void;
 }
 
 export function InventoryForm({ open, onOpenChange, initialData, onSuccess }: InventoryFormProps) {
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema) as any,
+        resolver: zodResolver(formSchema) as Resolver<z.infer<typeof formSchema>>,
         defaultValues: {
             name: '',
             brand: '',
@@ -68,7 +80,7 @@ export function InventoryForm({ open, onOpenChange, initialData, onSuccess }: In
                 const locs = await pb.collection('items_locations').getFullList({ sort: 'name' });
                 setLocations(locs.map(l => ({ label: l.name, value: l.name })));
             } catch (err) {
-                console.error("Error fetching form options:", err);
+                logger.error("Error fetching form options:", err);
             }
         };
         fetchData();
@@ -145,7 +157,7 @@ export function InventoryForm({ open, onOpenChange, initialData, onSuccess }: In
             onSuccess();
             onOpenChange(false);
         } catch (error) {
-            console.error('Error saving item:', error);
+            logger.error('Error saving item:', error);
             alert('Failed to save item');
         }
     };
@@ -158,7 +170,7 @@ export function InventoryForm({ open, onOpenChange, initialData, onSuccess }: In
                 onSuccess();
                 onOpenChange(false);
             } catch (error) {
-                console.error('Error deleting item:', error);
+                logger.error('Error deleting item:', error);
                 alert('Failed to delete item');
             }
         }

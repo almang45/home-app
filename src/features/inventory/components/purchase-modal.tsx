@@ -1,4 +1,5 @@
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
+import { logger } from '@/lib/logger';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import {
@@ -37,7 +38,7 @@ interface PurchaseModalProps {
 
 export function PurchaseModal({ open, onOpenChange, item, onSuccess }: PurchaseModalProps) {
     const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema) as any,
+        resolver: zodResolver(formSchema) as Resolver<z.infer<typeof formSchema>>,
         defaultValues: {
             price: 0,
             store_name: 'Pasar',
@@ -77,7 +78,7 @@ export function PurchaseModal({ open, onOpenChange, item, onSuccess }: PurchaseM
             onSuccess();
             onOpenChange(false);
         } catch (error) {
-            console.error('Error processing purchase:', error);
+            logger.error('Error processing purchase:', error);
             alert('Failed to process purchase');
         }
     };

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { z } from 'zod';
+import type { z } from 'zod';
 
 import {
     createBulkTransactions,
@@ -20,7 +20,7 @@ import {
     setBudget,
     updateDebt,
 } from './api';
-import {
+import type {
     budgetSchema,
     debtSchema,
     financeSourceSchema,

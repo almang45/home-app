@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
@@ -36,15 +36,17 @@ export function MonthlySummary() {
     const { data: subscriptions = [] } = useSubscriptions();
     const saveReflection = useSaveReflection();
 
-    useEffect(() => {
-        setReflectionText(reflection?.content || '');
-    }, [reflection]);
+    const [prevReflection, setPrevReflection] = useState(reflection);
+    if (prevReflection !== reflection) {
+        setPrevReflection(reflection);
+        setReflectionText(reflection?.content ?? '');
+    }
 
     const handleSaveReflection = async () => {
         try {
             await saveReflection.mutateAsync({ month, content: reflectionText });
             toast.success("Reflection saved");
-        } catch (error) {
+        } catch (_error) {
             toast.error("Failed to save reflection");
         }
     };
