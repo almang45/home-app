@@ -55,5 +55,13 @@ export default defineConfig(
       // Prevent duplicate imports from the same module
       'no-duplicate-imports': 'error',
     },
+  },
+  // Node.js CLI scripts — console and any types are intentional in CLI tooling
+  {
+    files: ['scripts/**/*.{ts,js}'],
+    rules: {
+      'no-console': 'off',
+      '@typescript-eslint/no-explicit-any': 'off',
+    },
   }
 )
