@@ -12,6 +12,11 @@ import {
   type CraftingIngredient,
 } from '@/lib/warframe-crafting-recipes'
 import {
+  getCachedBlueprintDB,
+  lookupBlueprint,
+  type WikiaBlueprintDB,
+} from '@/lib/wikia-blueprint-scraper'
+import {
   ALL_TRACKABLE_CATEGORIES,
   type ItemCategory,
   type ItemComponent,
@@ -43,25 +48,96 @@ export function useWarframes() {
   }
 }
 
+// Companion weapons live in the 'Primary' WFCD category with type 'Companion Weapon'
+const isCompanionWeapon = (i: WarframeItem) =>
+  i.category === 'Primary' && i.type === 'Companion Weapon'
+
 export function useWeapons(category?: ItemCategory) {
   const query = useAllItems()
   return {
     ...query,
     data: query.data
       ? category
-        ? filterByCategory(query.data, category)
-        : query.data.filter((i) =>
-            (
-              [
-                'Primary',
-                'Secondary',
-                'Melee',
-                'Arch-Gun',
-                'Arch-Melee',
-              ] as string[]
-            ).includes(i.category)
+        ? filterByCategory(query.data, category).filter(
+            (i) => !isCompanionWeapon(i)
+          )
+        : query.data.filter(
+            (i) =>
+              (
+                [
+                  'Primary',
+                  'Secondary',
+                  'Melee',
+                  'Arch-Gun',
+                  'Arch-Melee',
+                ] as string[]
+              ).includes(i.category) && !isCompanionWeapon(i)
           )
       : undefined,
+  }
+}
+
+/** Sentinel companion frames only (excludes sentinel weapons and resources) */
+export function useSentinelBodies() {
+  const query = useAllItems()
+  return {
+    ...query,
+    data: query.data?.filter(
+      (i) => i.category === 'Sentinels' && i.type === 'Sentinel'
+    ),
+  }
+}
+
+/** Sentinel & companion weapons: category 'Primary', type 'Companion Weapon' */
+export function useCompanionWeapons() {
+  const query = useAllItems()
+  return {
+    ...query,
+    data: query.data?.filter(isCompanionWeapon),
+  }
+}
+
+/** Pets: Kubrows, Kavats, MOAs, Hounds — category 'Pets', type 'Pets' */
+export function usePets() {
+  const query = useAllItems()
+  return {
+    ...query,
+    data: query.data?.filter(
+      (i) => i.category === 'Pets' && i.type === 'Pets'
+    ),
+  }
+}
+
+/** All companions combined: sentinel bodies + companion weapons + pets */
+export function useCompanions() {
+  const query = useAllItems()
+  return {
+    ...query,
+    data: query.data?.filter(
+      (i) =>
+        (i.category === 'Sentinels' && i.type === 'Sentinel') ||
+        isCompanionWeapon(i) ||
+        (i.category === 'Pets' && i.type === 'Pets')
+    ),
+  }
+}
+
+export function useArchwings() {
+  const query = useAllItems()
+  return {
+    ...query,
+    data: query.data ? filterByCategory(query.data, 'Archwing') : undefined,
+  }
+}
+
+/** Others: masterable Misc items — Amps, K-Drives, etc. */
+export function useOthers() {
+  const query = useAllItems()
+  return {
+    ...query,
+    data: query.data?.filter(
+      (i) => i.category === 'Misc' && i.masterable === true
+    ),
   }
 }
 
@@ -129,6 +205,25 @@ export function useResourceInventory() {
   })
 }
 
+/**
+ * Loads the wikia blueprint database from localStorage cache.
+ * Returns null when no cache exists — user must trigger a sync via
+ * `loadWikiaBlueprintDB()` from the UI (sync button in wishlist page).
+ *
+ * Mimics WFCD's WikiaDataScraper bulk-fetch strategy: one request for ALL
+ * blueprints rather than per-item wiki page scraping.
+ */
+export function useWikiaBlueprintDB() {
+  return useQuery<WikiaBlueprintDB | null>({
+    queryKey: ['wikia', 'blueprints'],
+    queryFn: () => getCachedBlueprintDB(),
+    // Re-read from cache on every mount but don't auto-refetch
+    staleTime: STALE_24H,
+    gcTime: STALE_24H,
+    refetchOnWindowFocus: false,
+  })
+}
+
 export function useIsOwned(uniqueName: string): boolean {
   const { data } = useOwnedItems()
   return data?.some((i) => i.uniqueName === uniqueName) ?? false
@@ -171,13 +266,49 @@ const SUB_BLUEPRINT_NAMES = new Set([
 ])
 
 /**
+ * Converts a wikia blueprint's ingredients into ItemComponent[] format.
+ */
+function wikiaIngredientsToComponents(
+  ingredients: { name: string; count: number }[],
+  buildPrice?: number
+): ItemComponent[] {
+  const components: ItemComponent[] = ingredients.map((ing) => ({
+    uniqueName:
+      `/Lotus/Types/Items/Resources/${ing.name.replace(/\s+/g, '')}`,
+    name: ing.name,
+    itemCount: ing.count,
+    imageName: ing.name.toLowerCase().replace(/\s+/g, '-') + '.png',
+    tradable: false,
+    type: 'Resource',
+  }))
+
+  if (buildPrice) {
+    components.unshift({
+      uniqueName: '/Lotus/Types/Items/MiscItems/Credits',
+      name: 'Credits',
+      itemCount: buildPrice,
+      imageName: 'credits.png',
+      tradable: false,
+      type: 'Resource',
+    })
+  }
+
+  return components
+}
+
+/**
  * Enriches wishlist items with sub-component crafting materials.
- * Uses manual crafting database since WFCD data doesn't include nested materials.
+ *
+ * Source priority (mimics WFCD's two-source strategy):
+ *   1. Wikia blueprint DB (Module:Blueprints/data) — bulk-fetched & cached
+ *   2. Manual crafting recipe database (fallback for items not in wikia DB)
+ *
  * Returns enriched WarframeItem[] with components populated with sub-materials.
  */
 export function useEnrichedWishlistItems() {
   const { data: wishlist } = useWishlistItems()
   const { data: allItems } = useAllItems()
+  const { data: wikiaDB } = useWikiaBlueprintDB()
 
   const enrichedItems: WarframeItem[] = (wishlist ?? [])
     .map((wish) => {
@@ -196,12 +327,26 @@ export function useEnrichedWishlistItems() {
             return comp
           }
 
-          // Try to get crafting recipe from manual database
           const fullName = `${item.name} ${comp.name}`
+
+          // ── Priority 1: wikia blueprint DB (WFCD wikia scraper approach) ──
+          if (wikiaDB) {
+            const wikiaBp = lookupBlueprint(wikiaDB, fullName)
+            if (wikiaBp && wikiaBp.ingredients.length > 0) {
+              return {
+                ...comp,
+                components: wikiaIngredientsToComponents(
+                  wikiaBp.ingredients,
+                  wikiaBp.buildPrice
+                ),
+              }
+            }
+          }
+
+          // ── Priority 2: manual crafting recipe database (fallback) ─────────
           const recipe = getCraftingRecipe(fullName)
-          
+
           if (recipe) {
-            // Convert crafting ingredients to ItemComponent format
             const subComponents: ItemComponent[] = recipe.ingredients.map(
               (ing: CraftingIngredient) => ({
                 uniqueName:
@@ -215,7 +360,6 @@ export function useEnrichedWishlistItems() {
               })
             )
 
-            // Add credits as a component if specified
             if (recipe.credits) {
               subComponents.unshift({
                 uniqueName: '/Lotus/Types/Items/MiscItems/Credits',

@@ -5,32 +5,37 @@ import { Main } from '@/components/layout/main'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
-import { useWeapons } from '../data/queries'
-import type { WarframeItem } from '../data/types'
+import {
+  useCompanions,
+  useSentinelBodies,
+  useCompanionWeapons,
+  usePets,
+} from '../data/queries'
 import { ItemsGrid } from './items-grid'
 
-const WEAPON_TABS = [
+type CompanionTab = 'all' | 'sentinels' | 'sentinel-weapons' | 'pets'
+
+const TABS: { value: CompanionTab; label: string }[] = [
   { value: 'all', label: 'All' },
-  { value: 'Primary', label: 'Primary' },
-  { value: 'Secondary', label: 'Secondary' },
-  { value: 'Melee', label: 'Melee' },
-  { value: 'Arch-Gun', label: 'Arch-Gun' },
-  { value: 'Arch-Melee', label: 'Arch-Melee' },
-] as const
+  { value: 'sentinels', label: 'Sentinels' },
+  { value: 'sentinel-weapons', label: 'Sentinel Weapons' },
+  { value: 'pets', label: 'Pets' },
+]
 
-type WeaponTabValue = (typeof WEAPON_TABS)[number]['value']
+export function CompanionsPage() {
+  const [tab, setTab] = useState<string>('all')
 
-function filterByTab(
-  all: WarframeItem[] | undefined,
-  tab: WeaponTabValue
-): WarframeItem[] | undefined {
-  if (tab === 'all') return all
-  return all?.filter((i) => i.category === tab)
-}
+  const { data: all, isLoading } = useCompanions()
+  const { data: sentinels } = useSentinelBodies()
+  const { data: sentinelWeapons } = useCompanionWeapons()
+  const { data: pets } = usePets()
 
-export function WeaponsPage() {
-  const [tab, setTab] = useState<WeaponTabValue>('all')
-  const { data: all, isLoading } = useWeapons()
+  const dataByTab: Record<CompanionTab, typeof all> = {
+    all,
+    sentinels,
+    'sentinel-weapons': sentinelWeapons,
+    pets,
+  }
 
   return (
     <>
@@ -44,36 +49,33 @@ export function WeaponsPage() {
 
       <Main>
         <div className='mb-4'>
-          <h2 className='text-2xl font-bold tracking-tight'>Weapons</h2>
+          <h2 className='text-2xl font-bold tracking-tight'>Companions</h2>
           <p className='text-muted-foreground'>
-            Browse all weapons by category. Track your arsenal.
+            Sentinels, sentinel weapons, Kubrows, Kavats, MOAs, Hounds and more.
+            Track what you own and have mastered.
           </p>
         </div>
 
-        <Tabs
-          value={tab}
-          onValueChange={(v) => setTab(v as WeaponTabValue)}
-          className='space-y-4'
-        >
+        <Tabs value={tab} onValueChange={setTab} className='space-y-4'>
           <TabsList>
-            {WEAPON_TABS.map((t) => (
+            {TABS.map((t) => (
               <TabsTrigger key={t.value} value={t.value}>
                 {t.label}
                 {all && (
                   <span className='text-muted-foreground ml-1.5 text-xs'>
-                    ({filterByTab(all, t.value)?.length ?? 0})
+                    ({dataByTab[t.value as CompanionTab]?.length ?? 0})
                   </span>
                 )}
               </TabsTrigger>
             ))}
           </TabsList>
 
-          {WEAPON_TABS.map((t) => (
+          {TABS.map((t) => (
             <TabsContent key={t.value} value={t.value}>
               <ItemsGrid
-                items={filterByTab(all, t.value)}
+                items={dataByTab[t.value as CompanionTab]}
                 isLoading={isLoading}
-                searchPlaceholder={`Search ${t.label.toLowerCase()} weapons...`}
+                searchPlaceholder={`Search ${t.label.toLowerCase()}...`}
                 showFilters
               />
             </TabsContent>

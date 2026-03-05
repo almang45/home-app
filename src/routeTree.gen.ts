@@ -43,8 +43,12 @@ import { Route as AuthenticatedWarframeTrackerWeaponsRouteImport } from './route
 import { Route as AuthenticatedWarframeTrackerWarframesRouteImport } from './routes/_authenticated/warframe-tracker/warframes'
 import { Route as AuthenticatedWarframeTrackerResourcesRouteImport } from './routes/_authenticated/warframe-tracker/resources'
 import { Route as AuthenticatedWarframeTrackerRecipeScraperRouteImport } from './routes/_authenticated/warframe-tracker/recipe-scraper'
+import { Route as AuthenticatedWarframeTrackerOthersRouteImport } from './routes/_authenticated/warframe-tracker/others'
 import { Route as AuthenticatedWarframeTrackerNewsRouteImport } from './routes/_authenticated/warframe-tracker/news'
+import { Route as AuthenticatedWarframeTrackerMasteryRouteImport } from './routes/_authenticated/warframe-tracker/mastery'
 import { Route as AuthenticatedWarframeTrackerDataManagementRouteImport } from './routes/_authenticated/warframe-tracker/data-management'
+import { Route as AuthenticatedWarframeTrackerCompanionsRouteImport } from './routes/_authenticated/warframe-tracker/companions'
+import { Route as AuthenticatedWarframeTrackerArchwingRouteImport } from './routes/_authenticated/warframe-tracker/archwing'
 import { Route as AuthenticatedSettingsNotificationsRouteImport } from './routes/_authenticated/settings/notifications'
 import { Route as AuthenticatedSettingsDisplayRouteImport } from './routes/_authenticated/settings/display'
 import { Route as AuthenticatedSettingsAppearanceRouteImport } from './routes/_authenticated/settings/appearance'
@@ -233,16 +237,40 @@ const AuthenticatedWarframeTrackerRecipeScraperRoute =
     path: '/warframe-tracker/recipe-scraper',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedWarframeTrackerOthersRoute =
+  AuthenticatedWarframeTrackerOthersRouteImport.update({
+    id: '/warframe-tracker/others',
+    path: '/warframe-tracker/others',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedWarframeTrackerNewsRoute =
   AuthenticatedWarframeTrackerNewsRouteImport.update({
     id: '/warframe-tracker/news',
     path: '/warframe-tracker/news',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedWarframeTrackerMasteryRoute =
+  AuthenticatedWarframeTrackerMasteryRouteImport.update({
+    id: '/warframe-tracker/mastery',
+    path: '/warframe-tracker/mastery',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedWarframeTrackerDataManagementRoute =
   AuthenticatedWarframeTrackerDataManagementRouteImport.update({
     id: '/warframe-tracker/data-management',
     path: '/warframe-tracker/data-management',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWarframeTrackerCompanionsRoute =
+  AuthenticatedWarframeTrackerCompanionsRouteImport.update({
+    id: '/warframe-tracker/companions',
+    path: '/warframe-tracker/companions',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedWarframeTrackerArchwingRoute =
+  AuthenticatedWarframeTrackerArchwingRouteImport.update({
+    id: '/warframe-tracker/archwing',
+    path: '/warframe-tracker/archwing',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
 const AuthenticatedSettingsNotificationsRoute =
@@ -311,8 +339,12 @@ export interface FileRoutesByFullPath {
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/warframe-tracker/archwing': typeof AuthenticatedWarframeTrackerArchwingRoute
+  '/warframe-tracker/companions': typeof AuthenticatedWarframeTrackerCompanionsRoute
   '/warframe-tracker/data-management': typeof AuthenticatedWarframeTrackerDataManagementRoute
+  '/warframe-tracker/mastery': typeof AuthenticatedWarframeTrackerMasteryRoute
   '/warframe-tracker/news': typeof AuthenticatedWarframeTrackerNewsRoute
+  '/warframe-tracker/others': typeof AuthenticatedWarframeTrackerOthersRoute
   '/warframe-tracker/recipe-scraper': typeof AuthenticatedWarframeTrackerRecipeScraperRoute
   '/warframe-tracker/resources': typeof AuthenticatedWarframeTrackerResourcesRoute
   '/warframe-tracker/warframes': typeof AuthenticatedWarframeTrackerWarframesRoute
@@ -351,8 +383,12 @@ export interface FileRoutesByTo {
   '/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/warframe-tracker/archwing': typeof AuthenticatedWarframeTrackerArchwingRoute
+  '/warframe-tracker/companions': typeof AuthenticatedWarframeTrackerCompanionsRoute
   '/warframe-tracker/data-management': typeof AuthenticatedWarframeTrackerDataManagementRoute
+  '/warframe-tracker/mastery': typeof AuthenticatedWarframeTrackerMasteryRoute
   '/warframe-tracker/news': typeof AuthenticatedWarframeTrackerNewsRoute
+  '/warframe-tracker/others': typeof AuthenticatedWarframeTrackerOthersRoute
   '/warframe-tracker/recipe-scraper': typeof AuthenticatedWarframeTrackerRecipeScraperRoute
   '/warframe-tracker/resources': typeof AuthenticatedWarframeTrackerResourcesRoute
   '/warframe-tracker/warframes': typeof AuthenticatedWarframeTrackerWarframesRoute
@@ -397,8 +433,12 @@ export interface FileRoutesById {
   '/_authenticated/settings/appearance': typeof AuthenticatedSettingsAppearanceRoute
   '/_authenticated/settings/display': typeof AuthenticatedSettingsDisplayRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
+  '/_authenticated/warframe-tracker/archwing': typeof AuthenticatedWarframeTrackerArchwingRoute
+  '/_authenticated/warframe-tracker/companions': typeof AuthenticatedWarframeTrackerCompanionsRoute
   '/_authenticated/warframe-tracker/data-management': typeof AuthenticatedWarframeTrackerDataManagementRoute
+  '/_authenticated/warframe-tracker/mastery': typeof AuthenticatedWarframeTrackerMasteryRoute
   '/_authenticated/warframe-tracker/news': typeof AuthenticatedWarframeTrackerNewsRoute
+  '/_authenticated/warframe-tracker/others': typeof AuthenticatedWarframeTrackerOthersRoute
   '/_authenticated/warframe-tracker/recipe-scraper': typeof AuthenticatedWarframeTrackerRecipeScraperRoute
   '/_authenticated/warframe-tracker/resources': typeof AuthenticatedWarframeTrackerResourcesRoute
   '/_authenticated/warframe-tracker/warframes': typeof AuthenticatedWarframeTrackerWarframesRoute
@@ -442,8 +482,12 @@ export interface FileRouteTypes {
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
+    | '/warframe-tracker/archwing'
+    | '/warframe-tracker/companions'
     | '/warframe-tracker/data-management'
+    | '/warframe-tracker/mastery'
     | '/warframe-tracker/news'
+    | '/warframe-tracker/others'
     | '/warframe-tracker/recipe-scraper'
     | '/warframe-tracker/resources'
     | '/warframe-tracker/warframes'
@@ -482,8 +526,12 @@ export interface FileRouteTypes {
     | '/settings/appearance'
     | '/settings/display'
     | '/settings/notifications'
+    | '/warframe-tracker/archwing'
+    | '/warframe-tracker/companions'
     | '/warframe-tracker/data-management'
+    | '/warframe-tracker/mastery'
     | '/warframe-tracker/news'
+    | '/warframe-tracker/others'
     | '/warframe-tracker/recipe-scraper'
     | '/warframe-tracker/resources'
     | '/warframe-tracker/warframes'
@@ -527,8 +575,12 @@ export interface FileRouteTypes {
     | '/_authenticated/settings/appearance'
     | '/_authenticated/settings/display'
     | '/_authenticated/settings/notifications'
+    | '/_authenticated/warframe-tracker/archwing'
+    | '/_authenticated/warframe-tracker/companions'
     | '/_authenticated/warframe-tracker/data-management'
+    | '/_authenticated/warframe-tracker/mastery'
     | '/_authenticated/warframe-tracker/news'
+    | '/_authenticated/warframe-tracker/others'
     | '/_authenticated/warframe-tracker/recipe-scraper'
     | '/_authenticated/warframe-tracker/resources'
     | '/_authenticated/warframe-tracker/warframes'
@@ -803,6 +855,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWarframeTrackerRecipeScraperRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/warframe-tracker/others': {
+      id: '/_authenticated/warframe-tracker/others'
+      path: '/warframe-tracker/others'
+      fullPath: '/warframe-tracker/others'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerOthersRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/warframe-tracker/news': {
       id: '/_authenticated/warframe-tracker/news'
       path: '/warframe-tracker/news'
@@ -810,11 +869,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWarframeTrackerNewsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/warframe-tracker/mastery': {
+      id: '/_authenticated/warframe-tracker/mastery'
+      path: '/warframe-tracker/mastery'
+      fullPath: '/warframe-tracker/mastery'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerMasteryRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/warframe-tracker/data-management': {
       id: '/_authenticated/warframe-tracker/data-management'
       path: '/warframe-tracker/data-management'
       fullPath: '/warframe-tracker/data-management'
       preLoaderRoute: typeof AuthenticatedWarframeTrackerDataManagementRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/warframe-tracker/companions': {
+      id: '/_authenticated/warframe-tracker/companions'
+      path: '/warframe-tracker/companions'
+      fullPath: '/warframe-tracker/companions'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerCompanionsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/warframe-tracker/archwing': {
+      id: '/_authenticated/warframe-tracker/archwing'
+      path: '/warframe-tracker/archwing'
+      fullPath: '/warframe-tracker/archwing'
+      preLoaderRoute: typeof AuthenticatedWarframeTrackerArchwingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/settings/notifications': {
@@ -913,8 +993,12 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedErrorsErrorRoute: typeof AuthenticatedErrorsErrorRoute
   AuthenticatedInventoryPurchasesRoute: typeof AuthenticatedInventoryPurchasesRoute
   AuthenticatedInventorySuppliesRoute: typeof AuthenticatedInventorySuppliesRoute
+  AuthenticatedWarframeTrackerArchwingRoute: typeof AuthenticatedWarframeTrackerArchwingRoute
+  AuthenticatedWarframeTrackerCompanionsRoute: typeof AuthenticatedWarframeTrackerCompanionsRoute
   AuthenticatedWarframeTrackerDataManagementRoute: typeof AuthenticatedWarframeTrackerDataManagementRoute
+  AuthenticatedWarframeTrackerMasteryRoute: typeof AuthenticatedWarframeTrackerMasteryRoute
   AuthenticatedWarframeTrackerNewsRoute: typeof AuthenticatedWarframeTrackerNewsRoute
+  AuthenticatedWarframeTrackerOthersRoute: typeof AuthenticatedWarframeTrackerOthersRoute
   AuthenticatedWarframeTrackerRecipeScraperRoute: typeof AuthenticatedWarframeTrackerRecipeScraperRoute
   AuthenticatedWarframeTrackerResourcesRoute: typeof AuthenticatedWarframeTrackerResourcesRoute
   AuthenticatedWarframeTrackerWarframesRoute: typeof AuthenticatedWarframeTrackerWarframesRoute
@@ -936,9 +1020,17 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedErrorsErrorRoute: AuthenticatedErrorsErrorRoute,
   AuthenticatedInventoryPurchasesRoute: AuthenticatedInventoryPurchasesRoute,
   AuthenticatedInventorySuppliesRoute: AuthenticatedInventorySuppliesRoute,
+  AuthenticatedWarframeTrackerArchwingRoute:
+    AuthenticatedWarframeTrackerArchwingRoute,
+  AuthenticatedWarframeTrackerCompanionsRoute:
+    AuthenticatedWarframeTrackerCompanionsRoute,
   AuthenticatedWarframeTrackerDataManagementRoute:
     AuthenticatedWarframeTrackerDataManagementRoute,
+  AuthenticatedWarframeTrackerMasteryRoute:
+    AuthenticatedWarframeTrackerMasteryRoute,
   AuthenticatedWarframeTrackerNewsRoute: AuthenticatedWarframeTrackerNewsRoute,
+  AuthenticatedWarframeTrackerOthersRoute:
+    AuthenticatedWarframeTrackerOthersRoute,
   AuthenticatedWarframeTrackerRecipeScraperRoute:
     AuthenticatedWarframeTrackerRecipeScraperRoute,
   AuthenticatedWarframeTrackerResourcesRoute:

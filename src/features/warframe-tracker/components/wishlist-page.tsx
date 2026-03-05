@@ -1,6 +1,18 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronRight, Heart, Trash2 } from 'lucide-react'
+import {
+  ChevronDown,
+  ChevronRight,
+  Heart,
+  Loader2,
+  RefreshCw,
+  Trash2,
+} from 'lucide-react'
+import { toast } from 'sonner'
 import { cn } from '@/lib/utils'
+import {
+  loadWikiaBlueprintDB,
+  getBlueprintDBCacheAge,
+} from '@/lib/wikia-blueprint-scraper'
 import { getItemImageUrl } from '@/lib/warframe-api'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -9,12 +21,14 @@ import { Main } from '@/components/layout/main'
 import { ProfileDropdown } from '@/components/profile-dropdown'
 import { Search } from '@/components/search'
 import { ThemeSwitch } from '@/components/theme-switch'
+import { useQueryClient } from '@tanstack/react-query'
 import { useToggleWishlist } from '../data/mutations'
 import {
   useWishlistItems,
   useAllItems,
   useResourceInventory,
   useEnrichedWishlistItems,
+  useWikiaBlueprintDB,
 } from '../data/queries'
 import type { ItemComponent, WarframeItem } from '../data/types'
 import { ItemDetailDialog } from './item-detail-dialog'
@@ -258,9 +272,40 @@ export function WishlistPage() {
   const { data: enrichedItems, isLoading: enrichedLoading } =
     useEnrichedWishlistItems()
   const { data: inventory } = useResourceInventory()
+  const { data: wikiaDB } = useWikiaBlueprintDB()
   const toggleWishlist = useToggleWishlist()
+  const queryClient = useQueryClient()
+  const [syncing, setSyncing] = useState(false)
   const [selectedItem, setSelectedItem] = useState<WarframeItem | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+
+  const cacheAgeMs = getBlueprintDBCacheAge()
+  const cacheAgeHours =
+    cacheAgeMs != null ? Math.floor(cacheAgeMs / 1000 / 60 / 60) : null
+
+  /**
+   * Mimics WikiaDataScraper.scrape() triggered from the UI.
+   * Fetches Module:Blueprints/data, parses it, caches to localStorage,
+   * then invalidates the query so useEnrichedWishlistItems() re-runs.
+   */
+  async function syncBlueprintDB(force = false) {
+    setSyncing(true)
+    try {
+      const result = await loadWikiaBlueprintDB(force)
+      await queryClient.invalidateQueries({ queryKey: ['wikia', 'blueprints'] })
+      toast.success(
+        result.fromCache
+          ? `Blueprint DB loaded from cache (${result.entriesCount} entries)`
+          : `Blueprint DB synced — ${result.entriesCount} entries`
+      )
+    } catch (err) {
+      toast.error(
+        `Blueprint sync failed: ${err instanceof Error ? err.message : 'Unknown error'}`
+      )
+    } finally {
+      setSyncing(false)
+    }
+  }
 
   const isLoading = wlLoading || itemsLoading
 
@@ -284,13 +329,55 @@ export function WishlistPage() {
       </Header>
 
       <Main>
-        <div className='mb-4'>
-          <h2 className='text-2xl font-bold tracking-tight'>
-            Wishlist / Build Queue
-          </h2>
-          <p className='text-muted-foreground'>
-            Items you want to build with aggregated resource requirements.
-          </p>
+        <div className='mb-4 flex flex-wrap items-start justify-between gap-4'>
+          <div>
+            <h2 className='text-2xl font-bold tracking-tight'>
+              Wishlist / Build Queue
+            </h2>
+            <p className='text-muted-foreground'>
+              Items you want to build with aggregated resource requirements.
+            </p>
+          </div>
+
+          {/* Blueprint DB sync — mimics WFCD WikiaDataScraper bulk fetch */}
+          <div className='flex flex-col items-end gap-1'>
+            <div className='flex gap-2'>
+              {!wikiaDB && (
+                <Button
+                  size='sm'
+                  onClick={() => syncBlueprintDB(false)}
+                  disabled={syncing}
+                >
+                  {syncing ? (
+                    <Loader2 className='mr-2 size-4 animate-spin' />
+                  ) : (
+                    <RefreshCw className='mr-2 size-4' />
+                  )}
+                  Sync Blueprint Data
+                </Button>
+              )}
+              {wikiaDB && (
+                <Button
+                  size='sm'
+                  variant='outline'
+                  onClick={() => syncBlueprintDB(true)}
+                  disabled={syncing}
+                >
+                  {syncing ? (
+                    <Loader2 className='mr-2 size-4 animate-spin' />
+                  ) : (
+                    <RefreshCw className='mr-2 size-4' />
+                  )}
+                  Re-sync
+                </Button>
+              )}
+            </div>
+            <p className='text-muted-foreground text-xs'>
+              {wikiaDB
+                ? `Blueprint DB: ${wikiaDB.size} entries${cacheAgeHours != null ? ` · cached ${cacheAgeHours}h ago` : ''}`
+                : 'No blueprint DB — sync to get sub-blueprint materials'}
+            </p>
+          </div>
         </div>
 
         {isLoading ? (

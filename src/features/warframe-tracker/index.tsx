@@ -1,11 +1,16 @@
 import { Link } from '@tanstack/react-router'
 import {
   AlertTriangle,
-  Award,
+  Bot,
   Crosshair,
+  Feather,
+  Gem,
   Heart,
+  MoreHorizontal,
   Package,
   Shield,
+  Swords,
+  Trophy,
 } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -20,6 +25,9 @@ import {
   useMasteredItems,
   useWishlistItems,
   useWeapons,
+  useArchwings,
+  useCompanions,
+  useOthers,
 } from './data/queries'
 
 export function WarframeTrackerOverview() {
@@ -29,6 +37,9 @@ export function WarframeTrackerOverview() {
     error: warframesErrorMsg,
   } = useWarframes()
   const { data: weapons } = useWeapons()
+  const { data: archwings } = useArchwings()
+  const { data: companions } = useCompanions()
+  const { data: others } = useOthers()
   const { data: owned } = useOwnedItems()
   const { data: mastered } = useMasteredItems()
   const { data: wishlist } = useWishlistItems()
@@ -41,39 +52,77 @@ export function WarframeTrackerOverview() {
         i.category
       )
     ).length ?? 0
+  const ownedCompanions =
+    owned?.filter((i) => i.category === 'Sentinels' || i.category === 'Pets')
+      .length ?? 0
+  const ownedArchwings =
+    owned?.filter((i) => i.category === 'Archwing').length ?? 0
+  const ownedOthers =
+    owned?.filter((i) => i.category === 'Misc').length ?? 0
 
   const stats = [
     {
-      title: 'Total Warframes',
+      title: 'Warframes',
       value: warframes?.length ?? '...',
       sub: `${ownedWarframes} owned`,
       icon: Shield,
       href: '/warframe-tracker/warframes',
     },
     {
-      title: 'Total Weapons',
+      title: 'Weapons',
       value: weapons?.length ?? '...',
       sub: `${ownedWeapons} owned`,
-      icon: Crosshair,
+      icon: Swords,
       href: '/warframe-tracker/weapons',
+    },
+    {
+      title: 'Companions',
+      value: companions?.length ?? '...',
+      sub: `${ownedCompanions} owned`,
+      icon: Bot,
+      href: '/warframe-tracker/companions',
+    },
+    {
+      title: 'Archwing',
+      value: archwings?.length ?? '...',
+      sub: `${ownedArchwings} owned`,
+      icon: Feather,
+      href: '/warframe-tracker/archwing',
+    },
+    {
+      title: 'Others',
+      value: others?.length ?? '...',
+      sub: `${ownedOthers} owned`,
+      icon: MoreHorizontal,
+      href: '/warframe-tracker/others',
     },
     {
       title: 'Owned Items',
       value: owned?.length ?? 0,
+      sub: 'across all categories',
       icon: Package,
       href: '/warframe-tracker/warframes',
     },
     {
       title: 'Mastered',
       value: mastered?.length ?? 0,
-      icon: Award,
-      href: '/warframe-tracker/warframes',
+      sub: 'items mastered',
+      icon: Trophy,
+      href: '/warframe-tracker/mastery',
     },
     {
       title: 'Wishlist',
       value: wishlist?.length ?? 0,
+      sub: 'items to build',
       icon: Heart,
       href: '/warframe-tracker/wishlist',
+    },
+    {
+      title: 'Inventory',
+      value: '—',
+      sub: 'resources tracked',
+      icon: Gem,
+      href: '/warframe-tracker/resources',
     },
   ]
 
@@ -109,7 +158,7 @@ export function WarframeTrackerOverview() {
           </Alert>
         )}
 
-        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-5'>
+        <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-9'>
           {stats.map((stat) => (
             <Link key={stat.title} to={stat.href}>
               <Card className='transition-all hover:shadow-md'>
@@ -121,9 +170,7 @@ export function WarframeTrackerOverview() {
                 </CardHeader>
                 <CardContent>
                   <div className='text-2xl font-bold'>{stat.value}</div>
-                  {stat.sub && (
-                    <p className='text-muted-foreground text-xs'>{stat.sub}</p>
-                  )}
+                  <p className='text-muted-foreground text-xs'>{stat.sub}</p>
                 </CardContent>
               </Card>
             </Link>

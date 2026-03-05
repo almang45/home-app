@@ -82,6 +82,10 @@ export type ItemCategory =
   | 'Melee'
   | 'Arch-Gun'
   | 'Arch-Melee'
+  | 'Sentinels'
+  | 'Archwing'
+  | 'Pets'
+  | 'Misc'
   | 'Resources'
 
 export const WEAPON_CATEGORIES: ItemCategory[] = [
@@ -95,6 +99,10 @@ export const WEAPON_CATEGORIES: ItemCategory[] = [
 export const ALL_TRACKABLE_CATEGORIES: ItemCategory[] = [
   'Warframes',
   ...WEAPON_CATEGORIES,
+  'Sentinels',
+  'Archwing',
+  'Pets',
+  'Misc',
 ]
 
 /** News from /pc/news */

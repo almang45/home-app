@@ -41,6 +41,10 @@ async function fetchItemsFromGitHub(): Promise<WarframeItem[]> {
           'Melee',
           'Arch-Gun',
           'Arch-Melee',
+          'Sentinels',
+          'Archwing',
+          'Pets',
+          'Misc',
           'Resources',
         ].includes(item.category || '')
       )

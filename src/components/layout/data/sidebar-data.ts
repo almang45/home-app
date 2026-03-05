@@ -17,7 +17,11 @@ import {
   ServerOff,
   Settings,
   Shield,
+  Bot,
+  Feather,
+  MoreHorizontal,
   Swords,
+  Trophy,
   Wrench,
   UserCog,
   UserX,
@@ -140,6 +144,11 @@ export const sidebarData: SidebarData = {
               icon: Crosshair,
             },
             {
+              title: 'Mastery Tracker',
+              url: '/warframe-tracker/mastery',
+              icon: Trophy,
+            },
+            {
               title: 'News & Alerts',
               url: '/warframe-tracker/news',
               icon: Newspaper,
@@ -153,6 +162,21 @@ export const sidebarData: SidebarData = {
               title: 'Weapons',
               url: '/warframe-tracker/weapons',
               icon: Swords,
+            },
+            {
+              title: 'Companions',
+              url: '/warframe-tracker/companions',
+              icon: Bot,
+            },
+            {
+              title: 'Archwing',
+              url: '/warframe-tracker/archwing',
+              icon: Feather,
+            },
+            {
+              title: 'Others',
+              url: '/warframe-tracker/others',
+              icon: MoreHorizontal,
             },
             {
               title: 'Inventory',
